@@ -22,7 +22,7 @@ const config = {
 		paths: {
 			base: dev ? '' : '/vanguard-js/svelte-wikipedia-app',
 		},
-		appDir: 'app',
+		appDir: 'demo',
 		prerender: {
 			// This can be false if you're using a fallback (i.e. SPA mode)
 			default: true
