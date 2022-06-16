@@ -10,7 +10,7 @@
 </script>
 
 <!-- Search field -->
-<form class="mb-2 w-full md:mb-0 md:w-1/2" on:submit|preventDefault={handleSearch}>
+<form class="mb-2 max-w-3xl sm:w-full searchbar" on:submit|preventDefault={handleSearch}>
 	<div class="flex">
 		<LanguageDropdown on:lang-change/>
 		<div class="relative w-full">

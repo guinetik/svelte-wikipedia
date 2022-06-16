@@ -3,17 +3,18 @@
 	const dispatch = createEventDispatcher();
 	let languages = [
 		{ name: 'English', value: 'en' },
-		{ name: 'Português', value: 'pt' }
+		{ name: 'Português', value: 'pt' },
+		{ name: 'Español', value: 'es' },
 	];
 	let language = 'en';
 	const selectLanguage = (e) => {
 		language = e.target.attributes['data-lang'].nodeValue;
 		console.log('Language Changed', language);
 		dispatch('lang-change', language);
-		//this ugly ass line closes the dropdown. 
+		//this ugly ass line closes the dropdown.
 		// I couldnt find another way since the flowbite-svelte only works for dropdown links <a>,
 		// I had to use the vanilla flowbite
-		document.getElementById("dropdown-button").click();
+		document.getElementById('dropdown-button').click();
 	};
 </script>
 
@@ -49,7 +50,9 @@
 					type="button"
 					on:click={selectLanguage}
 					data-lang={l.value}
-					class="{language === l.value ? 'font-bold' : 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+					class="{language === l.value
+						? 'font-bold'
+						: 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 					>{l.name}</button
 				>
 			</li>
