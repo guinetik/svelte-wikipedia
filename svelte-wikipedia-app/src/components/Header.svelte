@@ -1,7 +1,7 @@
 <script>
 	import Searchbar from './Searchbar.svelte';
 	import Nav from './Nav.svelte';
-	import getLink from '../utils';
+	import {getLink} from '../utils';
 	
 
 	const toggleMenu = () => {

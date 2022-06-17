@@ -36,7 +36,7 @@
 	};
 </script>
 <main class="dark:bg-gray-800 bg-gray-100 min-h-screen">
-<div class="{pageScrollY > 100 ? 'fixed' : 'relative'} w-full" in:fade out:fade>
+<div class="{pageScrollY > 120 ? 'fixed top-0' : 'relative'} w-full transition-transform">
 	<Header on:wiki-search={handleSearch} on:lang-change={handleLangChange} />
 </div>
 	<slot class="h-full" />

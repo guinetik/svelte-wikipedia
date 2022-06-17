@@ -1,0 +1,3 @@
+import{a1 as m}from"./index-3103f734.js";function $(t){return t<.5?4*t*t*t:.5*Math.pow(2*t-2,3)+1}function d(t){const o=t-1;return o*o*o+1}function x(t){return t===0||t===1?t:t<.5?.5*Math.pow(2,20*t-10):-.5*Math.pow(2,10-t*20)+1}function g(t,{delay:o=0,duration:n=400,easing:a=m}={}){const c=+getComputedStyle(t).opacity;return{delay:o,duration:n,easing:a,css:r=>`opacity: ${r*c}`}}function h(t,{delay:o=0,duration:n=400,easing:a=d,x:c=0,y:r=0,opacity:i=0}={}){const s=getComputedStyle(t),e=+s.opacity,p=s.transform==="none"?"":s.transform,f=e*(1-i);return{delay:o,duration:n,easing:a,css:(u,y)=>`
+			transform: ${p} translate(${(1-u)*c}px, ${(1-u)*r}px);
+			opacity: ${e-f*y}`}}export{h as a,$ as c,x as e,g as f};

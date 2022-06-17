@@ -1,11 +1,11 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "start-82f84d0e.js",
+    "file": "start-b27841c1.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
-      "_index-aef86bfd.js",
-      "_index-732587ae.js",
+      "_index-3103f734.js",
+      "_index-f15d94d8.js",
       "_singletons-d1fb5791.js"
     ],
     "dynamicImports": [
@@ -16,77 +16,76 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "pages/__layout.svelte-6cfbfa20.js",
+    "file": "pages/__layout.svelte-e638a1aa.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-aef86bfd.js",
-      "_index-d3daf7d9.js",
-      "_WikiApiClient-597c6a77.js",
+      "_index-3103f734.js",
+      "_WikiApiClient-b5e92e71.js",
       "_singletons-d1fb5791.js",
-      "_index-732587ae.js"
+      "_index-f15d94d8.js"
     ],
     "css": [
-      "assets/pages/__layout.svelte-da8c4ac5.css"
+      "assets/pages/__layout.svelte-89181ca0.css"
     ]
   },
   ".svelte-kit/runtime/components/error.svelte": {
-    "file": "error.svelte-0aeffc6b.js",
+    "file": "error.svelte-568a6c06.js",
     "src": ".svelte-kit/runtime/components/error.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-aef86bfd.js"
+      "_index-3103f734.js"
     ]
   },
   "src/routes/about.svelte": {
-    "file": "pages/about.svelte-5769ce69.js",
+    "file": "pages/about.svelte-f53b30ce.js",
     "src": "src/routes/about.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-aef86bfd.js",
-      "_index-d3daf7d9.js"
+      "_index-3103f734.js",
+      "_index-6c6844be.js"
     ]
   },
   "src/routes/index.svelte": {
-    "file": "pages/index.svelte-8ab8bb78.js",
+    "file": "pages/index.svelte-426c4f81.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_index-aef86bfd.js",
-      "_index-d3daf7d9.js",
-      "_WikiApiClient-597c6a77.js",
-      "_index-732587ae.js"
+      "_index-3103f734.js",
+      "_index-6c6844be.js",
+      "_WikiApiClient-b5e92e71.js",
+      "_index-f15d94d8.js"
     ]
   },
-  "_index-aef86bfd.js": {
-    "file": "chunks/index-aef86bfd.js"
+  "_index-3103f734.js": {
+    "file": "chunks/index-3103f734.js"
   },
-  "_index-732587ae.js": {
-    "file": "chunks/index-732587ae.js",
+  "_index-f15d94d8.js": {
+    "file": "chunks/index-f15d94d8.js",
     "imports": [
-      "_index-aef86bfd.js"
+      "_index-3103f734.js"
     ]
   },
   "_singletons-d1fb5791.js": {
     "file": "chunks/singletons-d1fb5791.js"
   },
-  "_index-d3daf7d9.js": {
-    "file": "chunks/index-d3daf7d9.js",
+  "_WikiApiClient-b5e92e71.js": {
+    "file": "chunks/WikiApiClient-b5e92e71.js",
     "imports": [
-      "_index-aef86bfd.js"
-    ]
-  },
-  "_WikiApiClient-597c6a77.js": {
-    "file": "chunks/WikiApiClient-597c6a77.js",
-    "imports": [
-      "_index-732587ae.js"
+      "_index-f15d94d8.js"
     ],
     "css": [
       "assets/WikiApiClient-4ac6d6cc.css"
+    ]
+  },
+  "_index-6c6844be.js": {
+    "file": "chunks/index-6c6844be.js",
+    "imports": [
+      "_index-3103f734.js"
     ]
   }
 }
