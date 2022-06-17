@@ -5,6 +5,9 @@
 		{ name: 'English', value: 'en' },
 		{ name: 'Português', value: 'pt' },
 		{ name: 'Español', value: 'es' },
+		{ name: 'Français', value: 'fr' },
+		{ name: 'Italiano', value: 'it' },
+		{ name: 'Deutsch', value: 'de' }
 	];
 	let language = 'en';
 	const selectLanguage = (e) => {

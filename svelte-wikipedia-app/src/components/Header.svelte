@@ -1,6 +1,7 @@
 <script>
 	import Searchbar from './Searchbar.svelte';
 	import Nav from './Nav.svelte';
+	import getLink from '../utils';
 	
 
 	const toggleMenu = () => {
@@ -9,7 +10,7 @@
 	};
 </script>
 
-<header class="border-b md:flex justify-between md:items-center p-4 pb-0 shadow-lg md:pb-4 dark:bg-gray-800">
+<header class="w-full border-b md:flex justify-between md:items-center p-4 pb-0 shadow-lg md:pb-4 dark:bg-gray-800 bg-white">
 	<!-- Logo text or image -->
 	<div class="flex items-center mb-4 md:mb-0">
 		<img
@@ -20,7 +21,7 @@
 			src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/155px-Wikipedia-logo-v2.svg.png"
 		/>
 		<h1 class="leading-none text-2xl text-grey-darkest flex-grow">
-			<a class="no-underline text-grey-darkest hover:text-black dark:text-white dark:hover:text-cyan-300" href="#">
+			<a class="no-underline text-grey-darkest hover:text-black dark:text-white dark:hover:text-cyan-300" href={getLink('/')}>
 				Wiki Search
 			</a>
 		</h1>
