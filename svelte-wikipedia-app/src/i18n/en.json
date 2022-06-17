@@ -1,0 +1,10 @@
+{
+    "title" : "Svelte Wikipedia Search",
+    "header_title" : "Wiki Search",
+    "nav_about" : "About",
+    "search_placeholder": "Search pages",
+    "lang":"Language",
+    "home_header": "Welcome to Wiki Search",
+    "home_aside": "Loading popular articles...",
+    "home_featured_header": "Most viewed articles for"
+}

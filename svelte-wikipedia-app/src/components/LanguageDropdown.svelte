@@ -1,5 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { locale, _ } from 'svelte-i18n';
 	const dispatch = createEventDispatcher();
 	let languages = [
 		{ name: 'English', value: 'en' },
@@ -9,24 +10,31 @@
 		{ name: 'Italiano', value: 'it' },
 		{ name: 'Deutsch', value: 'de' }
 	];
-	let language = 'en';
+	let language = null;
+	let showDropdown = false;
+	locale.subscribe((l) => (language = l != null ? l.split('-')[0] : 'en'));
 	const selectLanguage = (e) => {
 		language = e.target.attributes['data-lang'].nodeValue;
 		console.log('Language Changed', language);
+		locale.set(language);
 		dispatch('lang-change', language);
-		//this ugly ass line closes the dropdown.
-		// I couldnt find another way since the flowbite-svelte only works for dropdown links <a>,
-		// I had to use the vanilla flowbite
-		document.getElementById('dropdown-button').click();
+		handleDropdown();
+	};
+	const handleDropdown = () => {
+		showDropdown = !showDropdown;
+	};
+	const handleWindowClick = () => {
+		if (showDropdown) handleDropdown();
 	};
 </script>
 
 <button
 	id="dropdown-button"
-	data-dropdown-toggle="dropdown"
+	on:click={handleDropdown}
 	class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
 	type="button"
-	>Language <svg
+	>{$_('lang')}
+	<svg
 		class="ml-1 w-4 h-4"
 		fill="currentColor"
 		viewBox="0 0 20 20"
@@ -40,25 +48,27 @@
 >
 <div
 	id="dropdown"
-	class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
-	data-popper-reference-hidden="true"
-	data-popper-escaped=""
-	data-popper-placement="top"
-	style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(897px, 5637px, 0px);"
+	on:pointerleave={handleWindowClick}
+	class="{showDropdown
+		? ''
+		: 'hidden'} z-50 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 top-16 -ml-8 absolute"
 >
 	<ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-		{#each languages as l}
-			<li>
-				<button
-					type="button"
-					on:click={selectLanguage}
-					data-lang={l.value}
-					class="{language === l.value
-						? 'font-bold'
-						: 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-					>{l.name}</button
-				>
-			</li>
-		{/each}
+		{#if language}
+			{#each languages as l}
+				<li>
+					<button
+						type="button"
+						on:click={selectLanguage}
+						data-lang={l.value}
+						class="{language === l.value
+							? 'font-bold'
+							: 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+						>{l.name}</button
+					>
+				</li>
+			{/each}
+		{/if}
 	</ul>
 </div>
+<svelte:body on:keydown={handleWindowClick} />

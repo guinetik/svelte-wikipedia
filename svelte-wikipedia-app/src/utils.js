@@ -1,4 +1,5 @@
 import { dev } from '$app/env';
+import { goto } from '$app/navigation';
 // something about svelte doesnt let me use links if i set a base
 // https://github.com/sveltejs/kit/issues/4528
 // so I created this little function that checks if it's dev, if not it appends the base path.
@@ -11,6 +12,16 @@ export function getLink(page) {
 		return page !== '/' ? basePath + '/' + page : basePath;
 	}
 }
+export function redirectHome(currentPage) {
+	if(dev) {
+		if (currentPage.url.pathname !== '/') goto('/');
+	} else {
+		console.log("c", currentPage.url.pathname);
+		if(currentPage.url.pathname.includes != basePath + '/') goto(basePath + '/');
+	}
+}
+// A small function to fix the transitions on svelte
+// https://github.com/sveltejs/svelte/issues/4735
 export function fix(transtion) {
 	return function (node, params) {
 		if (!node.hasOwnProperty('ownerDocument')) {

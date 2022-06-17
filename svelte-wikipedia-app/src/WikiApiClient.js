@@ -1,7 +1,7 @@
 import { writable, derived } from 'svelte/store';
 import {getYesterday} from './utils';
-let searchResultsStore = writable([]);
-let featuredResultsStore = writable({});
+export let searchResultsStore = writable([]);
+export let featuredResultsStore = writable({});
 Array.prototype.forEachAsyncParallel = async function (fn) {
 	await Promise.all(this.map(fn));
 };
@@ -10,7 +10,7 @@ const WikiApiClient = {
 	SEARCH_BASE_URL: 'https://:lang.wikipedia.org/w/api.php',
 	FEATURED_BASE_URL:
 		'https://wikimedia.org/api/rest_v1/metrics/pageviews/top/:lang.wikipedia.org/all-access/:date',
-	searchApiUrl: '',
+	searchApiUrl: null,
 	SEARCH_REQUEST_OPTIONS: {
 		format: 'json',
 		action: 'query',
@@ -48,6 +48,7 @@ const WikiApiClient = {
 		'Ajuda'
 	],
 	featuredDate: new Date(),
+	state: writable({loading:false}),
 	searchResults: derived(searchResultsStore, ($res) => {
 		let itens = [];
 		console.log('new search results:', $res);
@@ -96,12 +97,15 @@ const WikiApiClient = {
 			':lang',
 			WikiApiClient.language
 		).replaceAll(':date', searchDate.toJSON().slice(0, 10).replaceAll('-', '/'));
+		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
 		fetch(url)
 			.catch((error) => {
+				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
 				console.log('API ERROR', error);
 				retry();
 			})
 			.then((response, a) => {
+				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
 				if (response.status == 200) return response.json();
 				else {
 					return null;
@@ -173,19 +177,24 @@ const WikiApiClient = {
 			.replaceAll(':lang', WikiApiClient.language)
 			.replaceAll(':page', page);
 		//
+		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
 		const itemDetails = await fetch(url);
+		WikiApiClient.state.set({...WikiApiClient.state, loading:false});
 		const data = await itemDetails.json();
 		return data;
 	},
 	fetch: (url, store) => {
 		console.log('fecthing from:', url);
+		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
 		fetch(url)
 			.then((response) => response.json())
 			.then((data) => {
 				store.set(data);
+				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
 			})
 			.catch((error) => {
 				console.log(error);
+				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
 				return [];
 			});
 	},

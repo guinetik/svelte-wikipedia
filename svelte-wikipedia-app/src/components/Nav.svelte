@@ -1,5 +1,6 @@
 <script>
 	import { getLink } from '../utils';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <nav class="">
@@ -8,7 +9,7 @@
 			<a
 				href={getLink('about')}
 				class="block py-2 pr-4 pl-3 dark:text-gray-500 dark:hover:text-white font-bold"
-				aria-current="page">About</a
+				aria-current="page">{$_('nav_about')}</a
 			>
 		</li>
 		<li class="md:ml-2" />

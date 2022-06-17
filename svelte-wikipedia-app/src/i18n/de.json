@@ -1,0 +1,10 @@
+{
+    "title" : "Wikipedia-Suche mit Svelte",
+    "header_title" : "Wiki-Suche",
+    "nav_about" : "Über diese Seite",
+    "search_placeholder": "Artikel suchen",
+    "lang":"Sprache",
+    "home_header": "Willkommen bei der Wiki-Suche",
+    "home_aside": "Loading popular articles...",
+    "home_featured_header": "Meistgesehene Artikel für den"
+}
