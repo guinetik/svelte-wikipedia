@@ -20,7 +20,7 @@ const config = {
 			precompress: false
 		}),
 		paths: {
-			base: dev ? '' : '/svelte-wikipedia-app'
+			base: dev ? '' : '/svelte-wikipedia-app/wiki'
 		},
 		appDir: 'assets',
 		prerender: {

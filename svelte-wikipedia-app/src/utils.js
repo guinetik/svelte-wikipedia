@@ -5,7 +5,7 @@ import { goto } from '$app/navigation';
 // so I created this little function that checks if it's dev, if not it appends the base path.
 // I tried fetching the base path from the svelte.config.js but it complained in runtime since it needs nojs deps
 // So this is the best I got so far, which is not bad, but I have to edit this path should I change the hosting for production
-const basePath = '/svelte-wikipedia-app';
+const basePath = '/svelte-wikipedia-app/wiki/';
 export function getLink(page) {
 	if (dev) return page;
 	else {
