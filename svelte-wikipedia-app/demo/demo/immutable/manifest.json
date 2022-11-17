@@ -1,12 +1,12 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "start-88ee76a6.js",
+    "file": "start-b135bc76.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
       "_index-f0dd9566.js",
       "_singletons-e01e0108.js",
-      "_preload-helper-8ede576d.js"
+      "_preload-helper-33ed0e00.js"
     ],
     "dynamicImports": [
       "src/routes/__layout.svelte",
@@ -16,15 +16,15 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "pages/__layout.svelte-961902a7.js",
+    "file": "pages/__layout.svelte-d468d89b.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_preload-helper-8ede576d.js",
+      "_preload-helper-33ed0e00.js",
       "_index-f0dd9566.js",
-      "_index-bb7c7d40.js",
-      "_WikiArticle.svelte_svelte_type_style_lang-9712563d.js",
+      "_index-f9c319bc.js",
+      "_WikiArticle.svelte_svelte_type_style_lang-750171ad.js",
       "_singletons-e01e0108.js"
     ],
     "dynamicImports": [
@@ -49,25 +49,25 @@
     ]
   },
   "src/routes/about.svelte": {
-    "file": "pages/about.svelte-796f9372.js",
+    "file": "pages/about.svelte-a10a2c4f.js",
     "src": "src/routes/about.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-f0dd9566.js",
-      "_index-bb7c7d40.js",
+      "_index-f9c319bc.js",
       "_singletons-e01e0108.js"
     ]
   },
   "src/routes/index.svelte": {
-    "file": "pages/index.svelte-d36ad589.js",
+    "file": "pages/index.svelte-b0b0131d.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-f0dd9566.js",
-      "_index-bb7c7d40.js",
-      "_WikiArticle.svelte_svelte_type_style_lang-9712563d.js",
+      "_index-f9c319bc.js",
+      "_WikiArticle.svelte_svelte_type_style_lang-750171ad.js",
       "_singletons-e01e0108.js"
     ]
   },
@@ -80,21 +80,21 @@
       "_index-f0dd9566.js"
     ]
   },
-  "_preload-helper-8ede576d.js": {
-    "file": "chunks/preload-helper-8ede576d.js"
+  "_preload-helper-33ed0e00.js": {
+    "file": "chunks/preload-helper-33ed0e00.js"
   },
-  "_index-bb7c7d40.js": {
-    "file": "chunks/index-bb7c7d40.js",
+  "_index-f9c319bc.js": {
+    "file": "chunks/index-f9c319bc.js",
     "imports": [
       "_singletons-e01e0108.js",
       "_index-f0dd9566.js"
     ]
   },
-  "_WikiArticle.svelte_svelte_type_style_lang-9712563d.js": {
-    "file": "chunks/WikiArticle.svelte_svelte_type_style_lang-9712563d.js",
+  "_WikiArticle.svelte_svelte_type_style_lang-750171ad.js": {
+    "file": "chunks/WikiArticle.svelte_svelte_type_style_lang-750171ad.js",
     "imports": [
       "_singletons-e01e0108.js",
-      "_index-bb7c7d40.js"
+      "_index-f9c319bc.js"
     ],
     "css": [
       "assets/WikiArticle.svelte_svelte_type_style_lang-186e7aac.css"

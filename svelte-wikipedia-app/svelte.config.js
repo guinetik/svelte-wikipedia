@@ -20,7 +20,7 @@ const config = {
 			precompress: false
 		}),
 		paths: {
-			base: dev ? '' : '/vanguard-js/svelte-wikipedia-app'
+			base: dev ? '' : '/svelte-wikipedia-app'
 		},
 		appDir: 'demo',
 		prerender: {
