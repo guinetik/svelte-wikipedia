@@ -12,9 +12,9 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// default options are shown
-			pages: 'demo',
-			assets: 'demo',
-			domain: null,
+			pages: 'wiki',
+			assets: 'wiki',
+			domain: "js.guinetik.com",
 			jekyll: false,
 			fallback: null,
 			precompress: false
@@ -22,7 +22,7 @@ const config = {
 		paths: {
 			base: dev ? '' : '/svelte-wikipedia-app'
 		},
-		appDir: 'demo',
+		appDir: 'assets',
 		prerender: {
 			// This can be false if you're using a fallback (i.e. SPA mode)
 			default: true
