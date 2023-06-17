@@ -1,11 +1,21 @@
-# vanguard-js
+# svelte-wikipedia-app
 
-Studies on modern js tech
+Search pages on Wikipedia. [demo](https://guinetik.github.io/vanguard-js/svelte-wikipedia-app/demo/)
 
-## Repos
+```bash
+npm install
+npm run dev
 
-- [svelte-wikipedia-app](https://github.com/guinetik/vanguard-js/tree/master/svelte-wikipedia-app)
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-## Demos
+## Building
 
-- [svelte-wikipedia-app](https://guinetik.github.io/vanguard-js/svelte-wikipedia-app/demo/)
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.

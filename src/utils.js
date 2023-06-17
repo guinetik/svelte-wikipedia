@@ -7,10 +7,11 @@ import { goto } from '$app/navigation';
 // So this is the best I got so far, which is not bad, but I have to edit this path should I change the hosting for production
 const basePath = '/svelte-wikipedia-app/wiki/';
 export function getLink(page) {
-	if (dev) return page;
+	return page;
+	/* if (dev) return page;
 	else {
 		return page !== '/' ? basePath + '/' + page : basePath;
-	}
+	} */
 }
 export function redirectHome(currentPage) {
 	if(dev) {

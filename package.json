@@ -1,6 +1,6 @@
 {
 	"name": "svelte-wikipedia-app",
-	"version": "0.0.6",
+	"version": "1.0.0",
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
@@ -8,12 +8,14 @@
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
 		"lint": "prettier --check --plugin-search-dir=. .",
-		"format": "prettier --write --plugin-search-dir=. ."
+		"format": "prettier --write --plugin-search-dir=. .",
+		"deploy": "gh-pages --dist dist --branch gh-pages"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-static": "^1.0.0-next.34",
 		"@sveltejs/kit": "next",
+		"gh-pages": "^4.0.0",
 		"autoprefixer": "^10.4.7",
 		"flowbite-svelte": "^0.17.4",
 		"postcss": "^8.4.14",

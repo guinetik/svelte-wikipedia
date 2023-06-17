@@ -12,15 +12,15 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// default options are shown
-			pages: 'wiki',
-			assets: 'wiki',
-			domain: "js.guinetik.com",
+			pages: 'dist',
+			assets: 'dist',
+			domain: "wiki.guinetik.com",
 			jekyll: false,
 			fallback: null,
 			precompress: false
 		}),
 		paths: {
-			base: dev ? '' : '/svelte-wikipedia-app/wiki'
+			base: ''
 		},
 		appDir: 'assets',
 		prerender: {

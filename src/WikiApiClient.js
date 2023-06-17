@@ -1,11 +1,13 @@
 import { writable, derived } from 'svelte/store';
-import {getYesterday} from './utils';
+import { getYesterday } from './utils';
 export let searchResultsStore = writable([]);
 export let featuredResultsStore = writable({});
 Array.prototype.forEachAsyncParallel = async function (fn) {
 	await Promise.all(this.map(fn));
 };
 const WikiApiClient = {
+	retries:0,
+	maxRetries:10,
 	language: 'en',
 	SEARCH_BASE_URL: 'https://:lang.wikipedia.org/w/api.php',
 	FEATURED_BASE_URL:
@@ -48,7 +50,7 @@ const WikiApiClient = {
 		'Ajuda'
 	],
 	featuredDate: new Date(),
-	state: writable({loading:false}),
+	state: writable({ loading: false }),
 	searchResults: derived(searchResultsStore, ($res) => {
 		let itens = [];
 		console.log('new search results:', $res);
@@ -91,22 +93,30 @@ const WikiApiClient = {
 		// but there's no garantee that the api will have results depending on the time the user accesses the site
 		//
 		function retry() {
-			WikiApiClient.getFeaturedPosts(getYesterday(searchDate));
+			if(WikiApiClient.retries < WikiApiClient.maxRetries) {
+				setTimeout(WikiApiClient.getFeaturedPosts, (1000 * WikiApiClient.retries) + 1, getYesterday(searchDate));
+				WikiApiClient.retries++;
+			} else {
+				console.warn("MAX RETRIES REACHED! GIVING UP!");
+			}
 		}
 		let url = WikiApiClient.FEATURED_BASE_URL.replaceAll(
 			':lang',
 			WikiApiClient.language
 		).replaceAll(':date', searchDate.toJSON().slice(0, 10).replaceAll('-', '/'));
-		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
+		//
+		WikiApiClient.state.set({ ...WikiApiClient.state, loading: true });
+		//
 		fetch(url)
 			.catch((error) => {
-				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
+				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 				console.log('API ERROR', error);
-				retry();
+				
 			})
 			.then((response, a) => {
-				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
-				if (response.status == 200) return response.json();
+				console.log("aaaa", a);
+				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
+				if (response && response.status == 200) return response.json();
 				else {
 					return null;
 				}
@@ -177,24 +187,24 @@ const WikiApiClient = {
 			.replaceAll(':lang', WikiApiClient.language)
 			.replaceAll(':page', page);
 		//
-		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
+		WikiApiClient.state.set({ ...WikiApiClient.state, loading: true });
 		const itemDetails = await fetch(url);
-		WikiApiClient.state.set({...WikiApiClient.state, loading:false});
+		WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 		const data = await itemDetails.json();
 		return data;
 	},
 	fetch: (url, store) => {
 		console.log('fecthing from:', url);
-		WikiApiClient.state.set({...WikiApiClient.state, loading:true});
+		WikiApiClient.state.set({ ...WikiApiClient.state, loading: true });
 		fetch(url)
 			.then((response) => response.json())
 			.then((data) => {
 				store.set(data);
-				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
+				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 			})
 			.catch((error) => {
 				console.log(error);
-				WikiApiClient.state.set({...WikiApiClient.state, loading:false});
+				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 				return [];
 			});
 	},
