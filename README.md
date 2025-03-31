@@ -1,6 +1,6 @@
 # svelte-wikipedia-app
 
-Search pages on Wikipedia. [demo](https://guinetik.github.io/vanguard-js/svelte-wikipedia-app/demo/)
+Search pages on Wikipedia. [demo](https://wiki.guinetik.com/)
 
 ```bash
 npm install

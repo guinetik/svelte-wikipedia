@@ -41,7 +41,7 @@
 				<br/>
 				Check out the code on <a
 				class="text-blue-500 dark:text-cyan-300 hover:text-blue-700 dark:hover:text-cyan-500 hover:underline"
-				href="https://github.com/guinetik/vanguard-js/tree/master/svelte-wikipedia-app/">Github</a
+				href="https://github.com/guinetik/svelte-wikipedia/">Github</a
 			>!
 				<br/>
 				<i>I know the app has internationalization but I'm not translating this about into 5 languages lmao</i>
