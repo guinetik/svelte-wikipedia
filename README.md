@@ -1,6 +1,6 @@
 # svelte-wikipedia-app
 
-Search pages on Wikipedia. [demo](https://wiki.guinetik.com/)
+Search pages on Wikipedia. [demo](https://wikipedia.guinetik.com/)
 
 ```bash
 npm install
