@@ -6,5 +6,6 @@
     "lang":"Idioma",
     "home_header": "Bienvenido a Buscar Wiki",
     "home_aside": "Cargando artículos populares...",
-    "home_featured_header": "Artículos más vistos del día"
+    "home_featured_header": "Artículos más vistos del día",
+    "wiki_no_data": "No hay datos disponibles. Buscando en el día anterior..."
 }

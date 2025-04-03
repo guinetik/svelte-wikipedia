@@ -7,6 +7,7 @@
 	import Spinner from '../components/Spinner.svelte';
 	import { fix, redirectHome } from '../lib/utils';
 	import WikiApiClient from '../lib/WikiApiClient';
+	import Toasts from '../components/toast/Toasts.svelte';
 	//
 	register('de', () => import('../i18n/de.json'));
 	register('en', () => import('../i18n/en.json'));
@@ -60,7 +61,7 @@
 		redirectHome(currentPage);
 	};
 </script>
-
+<Toasts />
 {#if wikiStatus.loading || $isi8nLoading}
 	<div class="fixed w-screen h-screen z-40" in:fix(fade)>
 		<div class="w-full h-full bg-slate-800 opacity-80" />
@@ -101,4 +102,25 @@
 {/if}
 <svelte:window bind:scrollY={pageScrollY} />
 <svelte:body class="dark:bg-gray-800 bg-gray-100 h-screen" />
-<svelte:head><title>Svelte Wikipedia Search</title></svelte:head>
+<svelte:head>
+  <!-- Primary Meta -->
+  <title>Svelte Wikipedia Search by Guinetik</title>
+  <meta name="description" content="Explore trending Wikipedia articles with this Svelte-powered search tool. Built by Guinetik as a frontend demo." />
+
+  <!-- Open Graph (Facebook/LinkedIn) -->
+  <meta property="og:title" content="Svelte Wikipedia Search by Guinetik" />
+  <meta property="og:description" content="Real-time rankings of Wikipedia's most viewed articles" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://wikipedia.guinetik.com/social-preview.jpg" />
+  <meta property="og:url" content="https://wikipedia.guinetik.com" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Svelte Wikipedia Search by Guinetik" />
+  <meta name="twitter:description" content="Real-time rankings of Wikipedia's most viewed articles" />
+  <meta name="twitter:image" content="https://wikipedia.guinetik.com/social-preview.jpg" />
+  <meta name="twitter:creator" content="@guinetik" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://wikipedia.guinetik.com/favicon.png" />
+</svelte:head>

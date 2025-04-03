@@ -118,6 +118,7 @@ const WikiApiClient = {
 				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 				if (response && response.status == 200) return response.json();
 				else {
+					featuredResultsStore.set({ data:null, status: 'wiki_no_data', featuredDate: searchDate });
 					return null;
 				}
 			})
@@ -180,7 +181,11 @@ const WikiApiClient = {
 			}
 		}
 		WikiApiClient.featuredDate = searchDate;
-		featuredResultsStore.set({ data: result, featuredDate: searchDate });
+		if (result.length > 0) {
+			featuredResultsStore.set({ data: result, featuredDate: searchDate });
+		} else {
+			featuredResultsStore.set({ data:null, status: 'wiki_no_data', featuredDate: searchDate });
+		}
 	},
 	getPageDetails: async (page) => {
 		let url = 'https://:lang.wikipedia.org/api/rest_v1/page/summary/:page?origin=*'

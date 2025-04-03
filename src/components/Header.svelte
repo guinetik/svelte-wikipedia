@@ -31,7 +31,7 @@
 				width="54"
 				height="54"
 				class="pr-2"
-				src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/155px-Wikipedia-logo-v2.svg.png"
+				src="logo.png"
 			/>
 			<h1 class="leading-none text-2xl text-grey-darkest flex-grow mt-2">
 				<a

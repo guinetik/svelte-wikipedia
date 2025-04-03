@@ -9,6 +9,7 @@
 	import { fix } from '../lib/utils';
 	import WikiApiClient from '../lib/WikiApiClient';
 	import dateFormats from '../i18n/date.js';
+	import { addToast } from '../components/toast/store';
 	//
 	let searchResults = [];
 	let languageUnsubscribe;
@@ -20,7 +21,7 @@
 		// Initialize format based on current language
 		currentFormat = dateFormats[$locale];
 		// Subscribe to language changes
-		languageUnsubscribe = locale.subscribe(lang => {
+		languageUnsubscribe = locale.subscribe((lang) => {
 			currentFormat = dateFormats[lang] || dateFormats.en;
 		});
 	});
@@ -37,17 +38,14 @@
 	let featuredArticles = null;
 	let loading = false;
 	let datepickerStore;
-
-	// Track if we're in "user selection mode"
 	let isUserSelection = false;
-
 	// Bind to Datepicker's internal store
 	$: if (datepickerStore) {
 		datepickerStore.subscribe((state) => {
 			isUserSelection = state.hasChosen;
 		});
 	}
-
+	// Handle date changes
 	const getFeaturedByDate = () => {
 		if (loading) return;
 		if (resolvedDate && selectedDate.getTime() === resolvedDate.getTime()) return;
@@ -56,7 +54,6 @@
 		featuredArticles = null;
 		WikiApiClient.getFeaturedPosts(selectedDate);
 	};
-
 	// Only react to user selections, not calendar opens
 	$: {
 		if (selectedDate && isUserSelection) {
@@ -64,17 +61,26 @@
 			isUserSelection = false; // Reset for next interaction
 		}
 	}
-
 	// Handle API response
 	WikiApiClient.featuredArticles.subscribe((result) => {
+		if (result.status == 'wiki_no_data') {
+			addToast({
+				message: $_('wiki_no_data'),
+				type: 'info',
+				dismissible: true,
+				timeout: 1000
+			});
+			loading = false;
+			return;
+		}
 		if (result.data) {
 			resolvedDate = result.featuredDate;
 			selectedDate = result.featuredDate; // Keep UI in sync
 			featuredArticles = result.data
 				.sort((a, b) => b.views - a.views)
 				.map((article, i) => ({ ...article, i: i + 1 }));
+			loading = false;
 		}
-		loading = false;
 	});
 </script>
 

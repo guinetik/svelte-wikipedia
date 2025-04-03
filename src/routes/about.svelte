@@ -13,7 +13,8 @@
 		<div class="mt-2">
 			<h1 class="dark:text-white text-gray-800 text-6xl">{$_('title')}</h1>
 			<p class="mt-3 dark:text-gray-300 leading-10">
-				A small app I build to study the <a
+				🙋‍♂️ Hi everyone, <a href="http://guinetik.com">Guinetik</a> here,
+				This is a small app I built to study the <a
 					class="text-blue-500 dark:text-cyan-300 hover:text-blue-700 dark:hover:text-cyan-500 hover:underline"
 					href="https://svelte.dev/">Svelte</a
 				>
