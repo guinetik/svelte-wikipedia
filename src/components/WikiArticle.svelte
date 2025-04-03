@@ -1,7 +1,7 @@
 <script>
-	import { fade, fly } from 'svelte/transition';
-	import { fix } from '../utils';
 	import * as easingFunctions from 'svelte/easing';
+	import { fade, fly } from 'svelte/transition';
+	import { fix } from '../lib/utils';
 	export let article = {
 		title: 'Title',
 		text: 'text',

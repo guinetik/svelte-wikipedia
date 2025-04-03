@@ -14,7 +14,7 @@ const config = {
 			// default options are shown
 			pages: 'dist',
 			assets: 'dist',
-			domain: "wiki.guinetik.com",
+			domain: "wikipedia.guinetik.com",
 			jekyll: false,
 			fallback: null,
 			precompress: false

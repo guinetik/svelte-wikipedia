@@ -1,56 +1,80 @@
 <script>
-	import WikiArticleGrid from '../components/WikiArticleGrid.svelte';
-	import WikiApiClient from '../WikiApiClient';
+	import dayjs from 'dayjs';
+	import { onMount, onDestroy } from 'svelte';
+	import { Datepicker } from 'svelte-calendar';
+	import { _, locale } from 'svelte-i18n';
 	import { fade } from 'svelte/transition';
-	import { fix } from '../utils';
-	import { onMount } from 'svelte';
-	import { getTomorrow, getYesterday } from '../utils';
-	import { _ } from 'svelte-i18n';
+	import WikiArticleGrid from '../components/WikiArticleGrid.svelte';
+	import DatePickerTheme from '../lib/theme';
+	import { fix } from '../lib/utils';
+	import WikiApiClient from '../lib/WikiApiClient';
+	import dateFormats from '../i18n/date.js';
 	//
 	let searchResults = [];
-	let featuredArticles = [];
-	let featuredDate = new Date();
-	let isFeaturedDateToday = true;
+	let languageUnsubscribe;
+	let currentFormat = null;
 	//
 	onMount(async () => {
-		console.log('app mounted!');
-		if (featuredArticles.length == 0) {
-			await WikiApiClient.getFeaturedPosts(new Date());
-		}
+		//console.log('app mounted!');
+		WikiApiClient.getFeaturedPosts(selectedDate);
+		// Initialize format based on current language
+		currentFormat = dateFormats[$locale];
+		// Subscribe to language changes
+		languageUnsubscribe = locale.subscribe(lang => {
+			currentFormat = dateFormats[lang] || dateFormats.en;
+		});
 	});
-	const getFeaturedYesterday = () => {
-		WikiApiClient.getFeaturedPosts(getYesterday(featuredDate));
-	};
-	const getFeaturedTomorrow = () => {
-		if (checkDayBeforeTomorrow()) WikiApiClient.getFeaturedPosts(getTomorrow(featuredDate));
-	};
-	const checkDayBeforeTomorrow = () => {
-		const t = new Date();
-		t.setHours(0);
-		const tomorrow = getTomorrow(featuredDate);
-		return tomorrow.getTime() < t.getTime();
-	};
+	onDestroy(() => {
+		languageUnsubscribe?.();
+	});
 	//
 	WikiApiClient.searchResults.subscribe((data) => {
-		// console.log('new data', data);
 		searchResults = data;
 	});
+	//
+	let selectedDate = new Date();
+	let resolvedDate = null;
+	let featuredArticles = null;
+	let loading = false;
+	let datepickerStore;
+
+	// Track if we're in "user selection mode"
+	let isUserSelection = false;
+
+	// Bind to Datepicker's internal store
+	$: if (datepickerStore) {
+		datepickerStore.subscribe((state) => {
+			isUserSelection = state.hasChosen;
+		});
+	}
+
+	const getFeaturedByDate = () => {
+		if (loading) return;
+		if (resolvedDate && selectedDate.getTime() === resolvedDate.getTime()) return;
+
+		loading = true;
+		featuredArticles = null;
+		WikiApiClient.getFeaturedPosts(selectedDate);
+	};
+
+	// Only react to user selections, not calendar opens
+	$: {
+		if (selectedDate && isUserSelection) {
+			getFeaturedByDate();
+			isUserSelection = false; // Reset for next interaction
+		}
+	}
+
+	// Handle API response
 	WikiApiClient.featuredArticles.subscribe((result) => {
 		if (result.data) {
-			featuredDate = result.featuredDate;
-			isFeaturedDateToday = checkDayBeforeTomorrow();
-			featuredArticles = result.data.sort((a, b) => {
-				const va = a.views;
-				const vb = b.views;
-				if (va < vb) return 1;
-				else if (va === vb) return 0;
-				else return -1;
-			});
-			for (let i = 0; i < featuredArticles.length; i++) {
-				console.log(i, featuredArticles[i].title);
-				featuredArticles[i].i = 1 + i;
-			}
+			resolvedDate = result.featuredDate;
+			selectedDate = result.featuredDate; // Keep UI in sync
+			featuredArticles = result.data
+				.sort((a, b) => b.views - a.views)
+				.map((article, i) => ({ ...article, i: i + 1 }));
 		}
+		loading = false;
 	});
 </script>
 
@@ -58,26 +82,22 @@
 	<WikiArticleGrid articles={searchResults} />
 {/if}
 {#if searchResults.length == 0}
-	{#if featuredArticles.length > 0}
-		<h1 class="text-center dark:text-white text-gray-800 text-5xl mt-4 italic">
-			<span
-				on:click={getFeaturedYesterday}
-				class="dark:text-cyan-300 dark:hover:text-cyan-500 dark:active:text-cyan-700 hover:underline cursor-pointer"
-				>⇜</span
-			>
-			{$_('home_featured_header')} {featuredDate.toLocaleDateString()}
-			<span
-				on:click={getFeaturedTomorrow}
-				class={!isFeaturedDateToday
-					? 'text-gray-400'
-					: 'dark:text-cyan-300 dark:hover:text-cyan-500 dark:active:text-cyan-700 hover:underline cursor-pointer'}
-				>⇝</span
-			>
+	<header class="flex flex-row items-center justify-center gap-4 py-4">
+		<h1 class="dark:text-white text-gray-800 text-5xl italic">
+			{$_('home_featured_header')}
 		</h1>
-
+		<Datepicker
+			format={currentFormat}
+			bind:selected={selectedDate}
+			bind:store={datepickerStore}
+			end={dayjs().subtract(1, 'day').toDate()}
+			theme={DatePickerTheme}
+		/>
+	</header>
+	{#if featuredArticles && featuredArticles.length > 0}
 		<WikiArticleGrid articles={featuredArticles} />
 	{/if}
-	{#if featuredArticles.length == 0}
+	{#if !featuredArticles}
 		<section class="h-full" in:fix(fade) out:fix(fade)>
 			<h1 class="text-center dark:text-white text-gray-800 text-8xl mt-10">
 				{$_('home_header')}

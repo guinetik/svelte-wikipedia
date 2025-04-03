@@ -1,6 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { locale, _ } from 'svelte-i18n';
+	import { _, locale } from 'svelte-i18n';
 	const dispatch = createEventDispatcher();
 	let languages = [
 		{ name: 'English', value: 'en' },
@@ -15,7 +15,7 @@
 	locale.subscribe((l) => (language = l != null ? l.split('-')[0] : 'en'));
 	const selectLanguage = (e) => {
 		language = e.target.attributes['data-lang'].nodeValue;
-		console.log('Language Changed', language);
+		//console.log('Language Changed', language);
 		locale.set(language);
 		dispatch('lang-change', language);
 		handleDropdown();

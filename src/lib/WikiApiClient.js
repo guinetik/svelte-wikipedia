@@ -53,7 +53,7 @@ const WikiApiClient = {
 	state: writable({ loading: false }),
 	searchResults: derived(searchResultsStore, ($res) => {
 		let itens = [];
-		console.log('new search results:', $res);
+		//console.log('new search results:', $res);
 		if ($res.query) {
 			let i = 0;
 			Object.entries($res.query.pages).forEach((p) => {
@@ -77,7 +77,7 @@ const WikiApiClient = {
 		return $res;
 	}),
 	search: (searchTerm) => {
-		console.log('searching for ', searchTerm);
+		//console.log('searching for ', searchTerm);
 		WikiApiClient.searchApiUrl = WikiApiClient.getSearchApiUrl(searchTerm);
 		WikiApiClient.fetch(WikiApiClient.searchApiUrl, searchResultsStore);
 	},
@@ -110,11 +110,11 @@ const WikiApiClient = {
 		fetch(url)
 			.catch((error) => {
 				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
-				console.log('API ERROR', error);
+				console.error('API ERROR', error);
 				
 			})
 			.then((response, a) => {
-				console.log("aaaa", a);
+				//console.log("aaaa", a);
 				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 				if (response && response.status == 200) return response.json();
 				else {
@@ -194,7 +194,7 @@ const WikiApiClient = {
 		return data;
 	},
 	fetch: (url, store) => {
-		console.log('fecthing from:', url);
+		//console.log('fecthing from:', url);
 		WikiApiClient.state.set({ ...WikiApiClient.state, loading: true });
 		fetch(url)
 			.then((response) => response.json())
@@ -203,7 +203,7 @@ const WikiApiClient = {
 				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 			})
 			.catch((error) => {
-				console.log(error);
+				//console.log(error);
 				WikiApiClient.state.set({ ...WikiApiClient.state, loading: false });
 				return [];
 			});
@@ -219,7 +219,7 @@ const WikiApiClient = {
 		return WikiApiClient.getApiBaseURL() + options;
 	},
 	getApiBaseURL: () => {
-		console.log('language', WikiApiClient.language);
+		//console.log('language', WikiApiClient.language);
 		return WikiApiClient.SEARCH_BASE_URL.replaceAll(':lang', WikiApiClient.language);
 	},
 	setLanguage: (lang) => {

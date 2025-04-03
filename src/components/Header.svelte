@@ -1,10 +1,10 @@
 <script>
 	import Searchbar from './Searchbar.svelte';
 	import Nav from './Nav.svelte';
-	import { getLink } from '../utils';
-	import { searchResultsStore } from '../WikiApiClient';
+	import { getLink } from '../lib/utils';
+	import { searchResultsStore } from '../lib/WikiApiClient';
 	import { page } from '$app/stores';
-	import { redirectHome } from '../utils';
+	import { redirectHome } from '../lib/utils';
 	let searchbar;
 	let currentPage;
 	page.subscribe((data) => (currentPage = data));
@@ -59,7 +59,7 @@
 			</button>
 		</div>
 	</div>
-	<Searchbar on:wiki-search on:lang-change bind:this={searchbar}/>
+	<Searchbar on:wiki-search on:lang-change bind:this={searchbar} />
 	<div class="mobile-menu hidden md:flex items-center space-x-3 ">
 		<Nav />
 	</div>

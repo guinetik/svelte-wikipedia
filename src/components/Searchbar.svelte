@@ -1,9 +1,8 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { prevent_default } from 'svelte/internal';
-    import LanguageDropdown from './LanguageDropdown.svelte';
-	import WikiApiClient from '../WikiApiClient';
 	import { _ } from 'svelte-i18n';
+	import WikiApiClient from '../lib/WikiApiClient';
+	import LanguageDropdown from './LanguageDropdown.svelte';
 	const dispatch = createEventDispatcher();
 	let searchTerm = '';
 	const handleSearch = (e) => {
@@ -18,14 +17,14 @@
 <!-- Search field -->
 <form class="mb-2 max-w-3xl sm:w-full searchbar" on:submit|preventDefault={handleSearch}>
 	<div class="flex">
-		<LanguageDropdown on:lang-change/>
+		<LanguageDropdown on:lang-change />
 		<div class="relative w-full">
 			<input
 				type="search"
-                bind:value={searchTerm}
+				bind:value={searchTerm}
 				id="search-dropdown"
 				class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-				placeholder="{$_('search_placeholder')}"
+				placeholder={$_('search_placeholder')}
 				required
 			/>
 			<button

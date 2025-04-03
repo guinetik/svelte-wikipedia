@@ -1,6 +1,6 @@
 <script>
-	import { getLink } from '../utils';
 	import { _ } from 'svelte-i18n';
+	import { getLink } from '../lib/utils';
 </script>
 
 <nav class="">

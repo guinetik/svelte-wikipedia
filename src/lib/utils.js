@@ -17,7 +17,7 @@ export function redirectHome(currentPage) {
 	if(dev) {
 		if (currentPage.url.pathname !== '/') goto('/');
 	} else {
-		console.log("c", currentPage.url.pathname);
+		//console.log("c", currentPage.url.pathname);
 		if(currentPage.url.pathname.includes != basePath + '/') goto(basePath + '/');
 	}
 }

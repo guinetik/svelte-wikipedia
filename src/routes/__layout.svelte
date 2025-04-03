@@ -1,14 +1,12 @@
 <script>
+	import { page } from '$app/stores';
+	import { getLocaleFromNavigator, init, isLoading as isi8nLoading, locale, register } from 'svelte-i18n';
+	import { fade } from 'svelte/transition';
 	import '../app.css';
 	import Header from '../components/Header.svelte';
-	import WikiArticle from '../components/WikiArticle.svelte';
-	import WikiApiClient from '../WikiApiClient';
 	import Spinner from '../components/Spinner.svelte';
-	import { page } from '$app/stores';
-	import { redirectHome } from '../utils';
-	import { fade } from 'svelte/transition';
-	import { fix } from '../utils';
-	import { _, register, init, getLocaleFromNavigator, isLoading as isi8nLoading, locale } from 'svelte-i18n';
+	import { fix, redirectHome } from '../lib/utils';
+	import WikiApiClient from '../lib/WikiApiClient';
 	//
 	register('de', () => import('../i18n/de.json'));
 	register('en', () => import('../i18n/en.json'));
@@ -27,7 +25,7 @@
 			let lowcale = $locale
 			if(lowcale) {
 				WikiApiClient.language = lowcale.split("-")[0];
-			console.log("WikiApiClient.language", WikiApiClient.language);
+				//console.log("WikiApiClient.language", WikiApiClient.language);
 			}
 		}
 	});
