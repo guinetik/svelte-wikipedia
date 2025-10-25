@@ -7,55 +7,58 @@
 	import Footer from '../components/Footer.svelte';
 	import Spinner from '../components/Spinner.svelte';
 	import { fix, redirectHome } from '../lib/utils';
-	import WikiApiClient from '../lib/WikiApiClient';
+	import { searchStore, featuredStore, loadingStore } from '../lib/stores';
 	import Toasts from '../components/toast/Toasts.svelte';
-	//
+	
 	register('de', () => import('../i18n/de.json'));
 	register('en', () => import('../i18n/en.json'));
 	register('es', () => import('../i18n/es.json'));
 	register('fr', () => import('../i18n/fr.json'));
 	register('it', () => import('../i18n/it.json'));
 	register('pt', () => import('../i18n/pt.json'));
-	//
+	
 	let lang = getLocaleFromNavigator();
 	init({
 		fallbackLocale: 'en',
 		initialLocale: lang
 	});
-	isi8nLoading.subscribe((r) => {
-		if(!r) {
-			let lowcale = $locale
-			if(lowcale) {
-				WikiApiClient.language = lowcale.split("-")[0];
-				//console.log("WikiApiClient.language", WikiApiClient.language);
-			}
-		}
-	});
-	//
-	let searchResults = [];
-	let featuredArticles = [];
-	//
+	
 	let pageScrollY = 0;
 	let currentPage = {};
 	page.subscribe((data) => (currentPage = data));
-	//
+	
 	let wikiStatus = { loading: false };
-	WikiApiClient.state.subscribe((s) => (wikiStatus = s));
-	//
+	loadingStore.subscribe((s) => (wikiStatus = { loading: s }));
+	
+	/**
+	 * Handle search submission from searchbar
+	 * @param {CustomEvent} e - Search event with term in detail
+	 */
 	const handleSearch = (e) => {
 		handleUi();
-		WikiApiClient.search(e.detail);
+		searchStore.search(e.detail);
 	};
-	//
+	
+	/**
+	 * Handle language changes from language selector
+	 * @param {CustomEvent} e - Language change event with code in detail
+	 */
 	const handleLangChange = (e) => {
 		handleUi();
-		WikiApiClient.setLanguage(e.detail);
+		searchStore.setLanguage(e.detail);
+		featuredStore.setLanguage(e.detail);
 	};
-	//
+	
+	/**
+	 * Scroll page to top
+	 */
 	const scroll2Top = () => {
 		document.body.scrollIntoView();
 	};
-	//
+	
+	/**
+	 * Handle UI interactions - scroll to top and redirect home
+	 */
 	const handleUi = () => {
 		scroll2Top();
 		// if we're not home, redirect there to display search results
@@ -70,11 +73,13 @@
 	</div>
 {/if}
 {#if !$isi8nLoading}
-	<main class="dark:bg-gray-800 bg-gray-100 min-h-screen">
-		<div class="{pageScrollY > 120 ? 'fixed top-0' : 'relative'} w-full transition-transform">
+	<main class="dark:bg-gray-800 bg-gray-100 min-h-screen flex flex-col">
+		<div class="{pageScrollY > 120 ? 'fixed top-0' : 'relative'} w-full transition-transform z-30">
 			<Header on:wiki-search={handleSearch} on:lang-change={handleLangChange} />
 		</div>
-		<slot class="h-full" />
+		<div class="flex-1">
+			<slot class="h-full" />
+		</div>
 		<button
 			type="button"
 			data-mdb-ripple="true"

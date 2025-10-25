@@ -112,7 +112,8 @@ export function createFeaturedApi(language = 'en') {
 			text: extractArticleText(pageDetails),
 			link: extractArticleUrl(pageDetails),
 			image: image,
-			views: viewsItem.views
+			views: viewsItem.views,
+			tags: [viewsItem.views.toLocaleString() + ' views']
 		};
 	}
 
@@ -127,15 +128,47 @@ export function createFeaturedApi(language = 'en') {
 	function handleRetry(date, onRetry) {
 		if (retries < WIKIMEDIA_CONFIG.maxRetries) {
 			const delay = WIKIMEDIA_CONFIG.retryBackoff * (1 + retries);
-			console.log(`Retrying featured posts (attempt ${retries + 1}/${WIKIMEDIA_CONFIG.maxRetries})...`);
-			setTimeout(() => {
-				retries++;
-				onRetry(getYesterday(date));
-			}, delay);
+			console.log(`Retrying featured posts (attempt ${retries + 1}/${WIKIMEDIA_CONFIG.maxRetries}) with earlier date...`);
+			retries++;
+			if (onRetry) onRetry(getYesterday(date));
 		} else {
 			console.warn('Max retries reached for featured posts');
 		}
 	}
+
+	/**
+	 * Parse featured articles from Wikimedia API response
+	 * Fetches details for each article and normalizes data
+	 * 
+	 * @param {Object} data - Raw response from Wikimedia pageviews API
+	 * @returns {Promise<Array>} Processed articles array
+	 */
+	const parseFeatured = async (data) => {
+		if (!data.items || data.items.length === 0) {
+			return [];
+		}
+
+		const articles = data.items[0].articles;
+		if (!articles || articles.length === 0) {
+			return [];
+		}
+
+		// Process articles in parallel
+		const processedArticles = await Promise.all(
+			articles
+				.slice(0, WIKIMEDIA_CONFIG.maxArticles)
+				.map((item) => processArticle(item))
+		);
+
+		// Filter out nulls (invalid articles) and add rank
+		return processedArticles
+			.filter((article) => article !== null)
+			.map((article, index) => ({
+				...article,
+				rank: index + 1,
+				views_formatted: article.views.toLocaleString()
+			}));
+	};
 
 	return {
 		/**
@@ -155,12 +188,13 @@ export function createFeaturedApi(language = 'en') {
 
 		/**
 		 * Fetch featured articles for a specific date
-		 * Automatically retries if data isn't available yet
+		 * Automatically retries with earlier dates if data isn't available yet
+		 * Wikimedia API has a 24-hour delay - data for a given date is available the next day
 		 * 
 		 * @param {Date} date - Date to fetch featured articles for
 		 * @param {Object} options - Configuration options
 		 * @param {Function} [options.onSuccess] - Callback with articles array
-		 * @param {Function} [options.onError] - Callback with error
+		 * @param {Function} [options.onError] - Callback with error (only on max retries)
 		 * @param {Function} [options.onRetry] - Callback for retry attempts
 		 * @returns {Promise<Array>} Array of featured articles
 		 */
@@ -169,35 +203,68 @@ export function createFeaturedApi(language = 'en') {
 			
 			retries = 0;
 			lastFeaturedDate = date;
-			const url = buildFeaturedUrl(date);
+			
+			const attemptFetch = async (fetchDate) => {
+				const url = buildFeaturedUrl(fetchDate);
 
-			try {
-				const response = await fetch(url);
+				try {
+					const response = await fetch(url);
 
-				if (!response.ok) {
-					throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-				}
+					// 404 = no data available yet, try earlier date
+					if (response.status === 404) {
+						console.log(`No data for ${formatDateForApi(fetchDate)}, trying earlier date...`);
+						
+						if (retries < WIKIMEDIA_CONFIG.maxRetries) {
+							retries++;
+							const earlierDate = getYesterday(fetchDate);
+							if (onRetry) onRetry(earlierDate);
+							// Recursive retry with earlier date
+							return attemptFetch(earlierDate);
+						} else {
+							// Max retries reached
+							const error = new Error('No featured articles data available after maximum retries');
+							console.warn(error.message);
+							if (onError) onError(error);
+							return [];
+						}
+					}
 
-				const data = await response.json();
+					// Other HTTP errors
+					if (!response.ok) {
+						throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+					}
 
-				// Parse and process articles
-				const articles = await this.parseFeatured(data);
+					const data = await response.json();
 
-				if (articles.length === 0) {
-					// No data available, retry with earlier date
-					if (onRetry) onRetry(getYesterday(date));
-					else handleRetry(date, (retryDate) => this.fetchFeatured(retryDate, options));
+					// Parse and process articles
+					const articles = await parseFeatured(data);
+
+					if (articles.length === 0) {
+						// No articles in response, try earlier date
+						if (retries < WIKIMEDIA_CONFIG.maxRetries) {
+							retries++;
+							const earlierDate = getYesterday(fetchDate);
+							if (onRetry) onRetry(earlierDate);
+							return attemptFetch(earlierDate);
+						} else {
+							const error = new Error('No articles found after maximum retries');
+							console.warn(error.message);
+							if (onError) onError(error);
+							return [];
+						}
+					}
+
+					if (onSuccess) onSuccess(articles);
+					return articles;
+				} catch (error) {
+					// Network or parsing errors - don't retry, fail immediately
+					console.error('Featured articles fetch error:', error);
+					if (onError) onError(error);
 					return [];
 				}
+			};
 
-				if (onSuccess) onSuccess(articles);
-				return articles;
-			} catch (error) {
-				console.error('Featured articles fetch error:', error);
-				if (onError) onError(error);
-				else handleRetry(date, (retryDate) => this.fetchFeatured(retryDate, options));
-				return [];
-			}
+			return attemptFetch(date);
 		},
 
 		/**
@@ -207,32 +274,7 @@ export function createFeaturedApi(language = 'en') {
 		 * @param {Object} data - Raw response from Wikimedia pageviews API
 		 * @returns {Promise<Array>} Processed articles array
 		 */
-		parseFeatured: async (data) => {
-			if (!data.items || data.items.length === 0) {
-				return [];
-			}
-
-			const articles = data.items[0].articles;
-			if (!articles || articles.length === 0) {
-				return [];
-			}
-
-			// Process articles in parallel
-			const processedArticles = await Promise.all(
-				articles
-					.slice(0, WIKIMEDIA_CONFIG.maxArticles)
-					.map((item) => processArticle(item))
-			);
-
-			// Filter out nulls (invalid articles) and add rank
-			return processedArticles
-				.filter((article) => article !== null)
-				.map((article, index) => ({
-					...article,
-					rank: index + 1,
-					views_formatted: article.views.toLocaleString()
-				}));
-		},
+		parseFeatured: parseFeatured,
 
 		/**
 		 * Get the last featured date that was requested

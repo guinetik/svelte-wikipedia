@@ -2,7 +2,7 @@
 	import Searchbar from './Searchbar.svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import { getLink } from '../lib/utils';
-	import { searchResultsStore } from '../lib/WikiApiClient';
+	import { searchStore } from '../lib/stores';
 	import { page } from '$app/stores';
 	import { redirectHome } from '../lib/utils';
 
@@ -22,7 +22,7 @@
 	 * Navigate to home page and clear search
 	 */
 	const goHome = () => {
-		searchResultsStore.set([]);
+		searchStore.clear();
 		searchbar.clear();
 		redirectHome(currentPage);
 	};

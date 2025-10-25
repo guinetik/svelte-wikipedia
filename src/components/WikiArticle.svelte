@@ -10,6 +10,11 @@
 		image:
 			'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/JavaScript_screenshot.png/450px-JavaScript_screenshot.png'
 	};
+
+	/**
+	 * Ensure tags is always an array
+	 */
+	$: tagsToDisplay = Array.isArray(article.tags) ? article.tags : [];
 </script>
 
 <article
@@ -53,12 +58,12 @@
 		{/if}
 	</div>
 	<div class="px-4 pb-3 pt-2 flex-shrink-0 flex flex-wrap gap-1.5">
-		{#each article.tags as tag}
+		{#each tagsToDisplay as tag}
 			<a
 				target="_blank"
-				href={tag.includes('views')
+				href={article.link && (tag.includes('views')
 					? article.link
-					: article.link.replace(article.link.split('/').pop(), tag)}
+					: article.link.replace(article.link.split('/').pop(), tag)) || '#'}
 			>
 				<span
 					class="article-tag inline-block bg-blue-100 dark:bg-blue-900 rounded-full px-3 py-1 text-gray-800 dark:text-blue-200"

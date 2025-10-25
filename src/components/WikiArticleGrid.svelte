@@ -4,12 +4,17 @@
 	 * Adapts column count based on screen size
 	 */
 	import WikiArticle from '../components/WikiArticle.svelte';
-	
+
 	/**
 	 * Array of articles to display
 	 * @type {Array}
 	 */
 	export let articles = [];
+
+	/**
+	 * Ensure articles is always an array
+	 */
+	$: articlesToDisplay = Array.isArray(articles) ? articles : [];
 </script>
 
 <section class="w-full">
@@ -22,7 +27,7 @@
 		xl:columns-4 
 		2xl:columns-4"
 	>
-		{#each articles as wikiArticle (wikiArticle.i)}
+		{#each articlesToDisplay as wikiArticle (wikiArticle.i)}
 			<div class="break-inside-avoid mb-4 md:mb-6">
 				<WikiArticle article={wikiArticle} />
 			</div>

@@ -22,6 +22,21 @@ export function createSearchApi(language = 'en') {
 	let currentLanguage = language;
 	let lastSearchUrl = null;
 
+	/**
+	 * Build a complete search URL with query parameters
+	 * 
+	 * @param {string} searchTerm - The search query
+	 * @returns {string} Complete API URL
+	 */
+	const buildSearchUrl = (searchTerm) => {
+		const baseUrl = SEARCH_CONFIG.baseUrl.replace(':lang', currentLanguage);
+		const queryString = buildQueryString({
+			gsrsearch: searchTerm,
+			...SEARCH_CONFIG.defaultParams
+		});
+		return `${baseUrl}?${queryString}`;
+	};
+
 	return {
 		/**
 		 * Get the current language
@@ -44,14 +59,7 @@ export function createSearchApi(language = 'en') {
 		 * @param {string} searchTerm - The search query
 		 * @returns {string} Complete API URL
 		 */
-		buildSearchUrl: (searchTerm) => {
-			const baseUrl = SEARCH_CONFIG.baseUrl.replace(':lang', currentLanguage);
-			const queryString = buildQueryString({
-				gsrsearch: searchTerm,
-				...SEARCH_CONFIG.defaultParams
-			});
-			return `${baseUrl}?${queryString}`;
-		},
+		buildSearchUrl: buildSearchUrl,
 
 		/**
 		 * Perform a Wikipedia search
@@ -65,7 +73,7 @@ export function createSearchApi(language = 'en') {
 				throw new Error('Search term cannot be empty');
 			}
 
-			const url = this.buildSearchUrl(searchTerm);
+			const url = buildSearchUrl(searchTerm);
 			lastSearchUrl = url;
 
 			try {

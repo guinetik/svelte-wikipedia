@@ -68,6 +68,23 @@ export function extractArticleText(pageDetails) {
 }
 
 /**
+ * Strip HTML tags from text
+ * @param {string} html - HTML string
+ * @returns {string} Plain text without HTML tags
+ */
+export function stripHtmlTags(html) {
+	if (!html || typeof html !== 'string') return '';
+	return html
+		.replace(/<[^>]*>/g, '') // Remove HTML tags
+		.replace(/&amp;/g, '&')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&#039;/g, "'")
+		.trim();
+}
+
+/**
  * Extracts the article URL from different response formats
  * Handles both Wikipedia search API and REST API formats
  * 

@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { _ } from 'svelte-i18n';
-	import WikiApiClient from '../lib/WikiApiClient';
+	import { searchStore } from '../lib/stores';
 
 	const dispatch = createEventDispatcher();
 	let searchTerm = '';
@@ -11,6 +11,9 @@
 	 * @param {Event} e - Form submit event
 	 */
 	const handleSearch = (e) => {
+		if (searchTerm.trim()) {
+			searchStore.search(searchTerm);
+		}
 		dispatch('wiki-search', searchTerm);
 	};
 
@@ -20,7 +23,7 @@
 	 */
 	export function clear() {
 		searchTerm = '';
-		WikiApiClient.searchApiUrl = null;
+		searchStore.clear();
 	}
 </script>
 

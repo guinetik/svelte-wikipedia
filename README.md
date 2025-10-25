@@ -36,21 +36,29 @@ You can preview the production build with `npm run preview`.
 
 ## Architecture
 
-### New Modular API Structure
+### 🆕 Modular Stores + API Factories
 
-The project has been refactored with a clean, modular API layer:
+The project uses a clean, layered architecture:
 
+- **`stores.js`** - Unified Svelte stores (searchStore, featuredStore)
 - **`apiConfig.js`** - Centralized configuration and constants
 - **`apiUtils.js`** - Reusable utility functions for data processing
 - **`searchApi.js`** - Wikipedia search functionality
 - **`featuredApi.js`** - Trending/featured articles functionality
-- **`WikiApiClient.js`** - (Legacy) Main orchestrator, being phased out
 
-See [`docs/API_ARCHITECTURE.md`](./docs/API_ARCHITECTURE.md) for detailed documentation.
+**Benefits:**
+- ✅ Pure, testable API factories
+- ✅ Automatic language switching
+- ✅ Intelligent retry logic for API delays
+- ✅ Separated concerns
+- ✅ Better error handling
+
+See [`docs/MIGRATION_TO_STORES.md`](./docs/MIGRATION_TO_STORES.md) for architecture details.
 
 ## Documentation
 
 - **[API Architecture](./docs/API_ARCHITECTURE.md)** - Complete guide to the modular API design
+- **[Migration Guide](./docs/MIGRATION_TO_STORES.md)** - ✨ NEW: Stores architecture migration
 - **[Bug Fixes](./docs/BUG_FIXES.md)** - Information about bugs fixed and prevention strategies
 - **[Testing Guide](./docs/TESTING_GUIDE.md)** - How to test the API modules and add new tests
 
@@ -113,7 +121,7 @@ src/
 │   │   ├── apiUtils.js        # Reusable utilities
 │   │   ├── searchApi.js       # Wikipedia search
 │   │   └── featuredApi.js     # Trending articles
-│   ├── WikiApiClient.js       # Legacy (being phased out)
+│   ├── stores.js              # 🆕 Unified Svelte stores
 │   ├── theme.js
 │   └── utils.js
 ├── components/
@@ -131,9 +139,12 @@ src/
     └── ...
 
 docs/
-├── API_ARCHITECTURE.md        # 🆕 API design guide
-├── BUG_FIXES.md              # 🆕 Bug fixes & prevention
-└── TESTING_GUIDE.md          # 🆕 Testing setup & examples
+├── API_ARCHITECTURE.md        # API design guide
+├── MIGRATION_TO_STORES.md     # 🆕 Stores migration guide
+├── HOTFIX_RETRY_LOGIC.md      # 🆕 Retry logic details
+├── PHASE1_FINAL_SUMMARY.md    # 🆕 Phase 1 completion
+├── BUG_FIXES.md              # Bug fixes & prevention
+└── TESTING_GUIDE.md          # Testing setup & examples
 ```
 
 ## API Usage Examples
@@ -200,6 +211,7 @@ Contributions are welcome! Please:
 - ✅ Multi-language support - Stable
 - ✅ Bug fixes - Complete
 - ✅ Documentation - Complete
-- 🚧 Automated tests - In progress
-- 📅 Caching layer - Planned
+- ✅ Stores migration - Complete (Phase 1)
+- 🚧 Unit tests - In progress (Phase 2)
+- 📅 Caching layer - Planned (Phase 3)
 - 📅 Performance optimizations - Planned

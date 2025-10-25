@@ -7,39 +7,53 @@
 	import WikiArticleGrid from '../components/WikiArticleGrid.svelte';
 	import DatePickerTheme from '../lib/theme';
 	import { fix } from '../lib/utils';
-	import WikiApiClient from '../lib/WikiApiClient';
+	import { searchStore, featuredStore } from '../lib/stores';
 	import dateFormats from '../i18n/date.js';
 	import { addToast } from '../components/toast/store';
-	//
-	let searchResults = []; // Search results from the API
+	
+	// Search results from the API
+	let searchResults = [];
 	let localeStore; // Unsubscribe function for language changes
 	let currentFormat = null; // Current date format based on language
-	//
+	let lastLang = null; // Track language changes
+	
 	onMount(async () => {
-		//console.log('app mounted!');
 		// Get featured articles for today
-		WikiApiClient.getFeaturedPosts(selectedDate);
+		featuredStore.fetchForDate(selectedDate);
+		
 		// Initialize format based on current language
 		currentFormat = dateFormats[$locale];
+		
 		// Subscribe to language changes
 		localeStore = locale.subscribe((lang) => {
 			currentFormat = dateFormats[lang] || dateFormats.en;
+			
+			// Update language in stores when i18n locale changes
+			const langCode = lang?.split('-')[0] || 'en';
+			if (langCode !== lastLang) {
+				lastLang = langCode;
+				searchStore.setLanguage(langCode);
+				featuredStore.setLanguage(langCode);
+			}
 		});
 	});
+	
 	onDestroy(() => {
 		localeStore?.();
 	});
-	//
-	WikiApiClient.searchResults.subscribe((data) => {
+	
+	// Subscribe to search results
+	searchStore.results.subscribe((data) => {
 		searchResults = data;
 	});
-	//
+	
 	let selectedDate = new Date(); // Default to today
 	let resolvedDate = null; // Resolved date from API
-	let featuredArticles = null; // Featured articles from API
+	let featuredArticles = []; // Featured articles from API - initialize as empty array
 	let loading = false; // Loading state for API calls
 	let datepickerStore; // Datepicker store for internal state
 	let isUserSelection = false; // Track if the user has selected a date
+	
 	// Bind to Datepicker's internal store
 	$: if (datepickerStore) {
 		datepickerStore.subscribe((state) => {
@@ -47,6 +61,7 @@
 			isUserSelection = state.hasChosen;
 		});
 	}
+	
 	// Handle date changes
 	const getFeaturedByDate = () => {
 		// Check if the date is valid
@@ -56,8 +71,9 @@
 		// Load featured articles for the selected date
 		loading = true;
 		featuredArticles = null;
-		WikiApiClient.getFeaturedPosts(selectedDate);
+		featuredStore.fetchForDate(selectedDate);
 	};
+	
 	// Only react to user selections, not calendar opens
 	$: {
 		// Only react if the user has selected a date
@@ -66,11 +82,18 @@
 			isUserSelection = false; // Reset for next interaction
 		}
 	}
-	// Handle API response
-	WikiApiClient.featuredArticles.subscribe((result) => {
+	
+	// Handle API response from featured store
+	const rawFeaturedStore = featuredStore.getRawStore();
+	rawFeaturedStore.subscribe((result) => {
+		// Ensure result is an object
+		if (!result || typeof result !== 'object') {
+			return;
+		}
+		
 		// Check if the API call was successful
-		if (result.status == 'wiki_no_data') {
-			// Give feedback to the user
+		if (result.status === 'wiki_no_data') {
+			// Give feedback to the user (no data available)
 			addToast({
 				message: $_('wiki_no_data'),
 				type: 'info',
@@ -78,10 +101,25 @@
 				timeout: 1000
 			});
 			loading = false;
+			featuredArticles = []; // Reset to empty array
 			return;
 		}
+		
+		if (result.status === 'error') {
+			// Handle final error (after retries exhausted)
+			addToast({
+				message: result.message || $_('wiki_no_data'),
+				type: 'error',
+				dismissible: true,
+				timeout: 2000
+			});
+			loading = false;
+			featuredArticles = []; // Reset to empty array
+			return;
+		}
+		
 		// If the API call was successful, update the state
-		if (result.data) {
+		if (result.data && Array.isArray(result.data)) {
 			// Update the dates
 			resolvedDate = result.featuredDate;
 			selectedDate = result.featuredDate; // Keep UI in sync
@@ -121,7 +159,7 @@
 	{#if featuredArticles && featuredArticles.length > 0}
 		<WikiArticleGrid articles={featuredArticles} />
 	{/if}
-	{#if !featuredArticles}
+	{#if !featuredArticles || featuredArticles.length === 0}
 		<section class="h-full" in:fix(fade) out:fix(fade)>
 			<h1 class="text-center dark:text-white text-gray-800 text-8xl mt-10">
 				{$_('home_header')}
