@@ -28,19 +28,23 @@
 	}}
 >
 	{#if article.image}
-		<div class="w-full h-56 bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
-			<a href={article.link} target="_blank" class="dark:text-cyan-300 text-blue-600 block w-full h-full">
+		<div class="w-full bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
+			<a href={article.link} target="_blank" class="dark:text-cyan-300 text-blue-600 block w-full">
 				<img 
 					alt={article.title} 
 					src={article.image} 
-					class="w-full h-full object-cover object-top" 
+					class="w-full h-auto object-cover object-top" 
 				/>
 			</a>
 		</div>
 	{/if}
 	<div class="px-4 py-3 flex-1 flex flex-col">
-		<a href={article.link} target="_blank" class="dark:text-cyan-300 text-blue-600 hover:underline">
-			<h2 class="{article.image ? 'article-title' : 'article-title-large'}">{article.title}</h2>
+		<a href={article.link} target="_blank" class="hover:underline">
+			{#if article.image}
+				<h2 class="font-bold text-lg leading-tight text-cyan-400 dark:text-cyan-300 line-clamp-2">{article.title}</h2>
+			{:else}
+				<h2 class="font-bold text-xl leading-tight text-cyan-400 dark:text-cyan-300 line-clamp-3">{article.title}</h2>
+			{/if}
 		</a>
 		{#if article.text}
 			<p class="{article.image ? 'article-description' : 'article-description-expanded'}">
@@ -68,7 +72,7 @@
 <style>
 	/* Utilities for expanded layouts */
 	:global(.article-title-large) {
-		@apply font-bold text-lg leading-tight text-gray-900 dark:text-white line-clamp-3;
+		@apply font-bold text-xl leading-tight text-gray-900 dark:text-white line-clamp-3;
 	}
 
 	:global(.article-description-expanded) {

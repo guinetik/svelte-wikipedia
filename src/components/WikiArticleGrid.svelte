@@ -14,23 +14,25 @@
 
 <section class="w-full">
 	<div
-		class="px-4 md:px-6 lg:px-8 grid gap-4 md:gap-6 
-		grid-cols-1 
-		sm:grid-cols-2 
-		md:grid-cols-3 
-		lg:grid-cols-4 
-		xl:grid-cols-4 
-		2xl:grid-cols-4"
+		class="px-4 md:px-6 lg:px-8 gap-4 md:gap-6
+		columns-1 
+		sm:columns-2 
+		md:columns-3 
+		lg:columns-4 
+		xl:columns-4 
+		2xl:columns-4"
 	>
 		{#each articles as wikiArticle (wikiArticle.i)}
-			<WikiArticle article={wikiArticle} />
+			<div class="break-inside-avoid mb-4 md:mb-6">
+				<WikiArticle article={wikiArticle} />
+			</div>
 		{/each}
 	</div>
 </section>
 
 <style>
-	/* Grid items will fill available space */
-	:global(.grid > *) {
-		min-height: 0;
+	/* Prevent card breaking across columns */
+	:global(.break-inside-avoid) {
+		break-inside: avoid;
 	}
 </style>
