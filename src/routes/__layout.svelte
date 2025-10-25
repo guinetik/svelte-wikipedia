@@ -4,6 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import '../app.css';
 	import Header from '../components/Header.svelte';
+	import Footer from '../components/Footer.svelte';
 	import Spinner from '../components/Spinner.svelte';
 	import { fix, redirectHome } from '../lib/utils';
 	import WikiApiClient from '../lib/WikiApiClient';
@@ -98,6 +99,7 @@
 				/></svg
 			>
 		</button>
+		<Footer />
 	</main>
 {/if}
 <svelte:window bind:scrollY={pageScrollY} />
