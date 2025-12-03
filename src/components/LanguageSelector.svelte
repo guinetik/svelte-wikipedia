@@ -59,7 +59,7 @@
 	<button
 		id="dropdown-button"
 		on:click={handleDropdown}
-		class="inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+		class="inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 focus:ring-4 focus:outline-none focus:ring-white/5 transition-colors backdrop-blur-sm"
 		type="button"
 	>
 		{$_('lang')}
@@ -82,9 +82,9 @@
 		on:pointerleave={handleWindowClick}
 		class="{showDropdown
 			? ''
-			: 'hidden'} z-50 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 top-16 absolute"
+			: 'hidden'} z-50 w-44 bg-[#111]/95 border border-white/10 backdrop-blur-xl rounded-lg shadow-xl top-16 absolute"
 	>
-		<ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
+		<ul class="py-1 text-sm text-gray-300" aria-labelledby="dropdown-button">
 			{#if language}
 				{#each languages as l}
 					<li>
@@ -93,8 +93,8 @@
 							on:click={selectLanguage}
 							data-lang={l.value}
 							class="{language === l.value
-								? 'font-bold'
-								: 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+								? 'font-semibold text-white bg-white/10'
+								: 'font-normal'} inline-flex py-2 px-4 w-full hover:bg-white/10 hover:text-white transition-colors"
 						>
 							{l.name}
 						</button>

@@ -3,15 +3,19 @@
 	import { getLink } from '../lib/utils';
 </script>
 
-<nav class="">
-	<ul class="list-reset md:flex md:items-center">
-		<li class="md:ml-2">
-			<a
-				href={getLink('about')}
-				class="block py-2 pr-4 pl-3 dark:text-gray-500 dark:hover:text-white font-bold"
-				aria-current="page">{$_('nav_about')}</a
-			>
-		</li>
-		<li class="md:ml-2" />
-	</ul>
+<nav class="navbar">
+	<div class="navbar-inner">
+		<div class="navbar-brand">
+			<!-- Logo is in Header.svelte, but we could put something here if Nav was independent -->
+		</div>
+		<ul class="navbar-menu">
+			<li>
+				<a
+					href={getLink('about')}
+					class="navbar-link"
+					aria-current="page">{$_('nav_about')}</a
+				>
+			</li>
+		</ul>
+	</div>
 </nav>

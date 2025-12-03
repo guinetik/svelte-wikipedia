@@ -39,21 +39,21 @@
 </script>
 
 <header
-	class="w-full border-b md:flex justify-between md:items-center p-4 pb-0 shadow-lg md:pb-4 dark:bg-gray-800 bg-white"
+	class="navbar w-full flex flex-col md:flex-row justify-between md:items-center p-4 shadow-lg"
 >
 	<!-- Logo and title -->
 	<div class="flex items-center justify-between mb-4 md:mb-0 md:flex-shrink-0">
 		<div class="flex items-center cursor-pointer align-middle" on:click={goHome}>
 			<img
 				alt="logo"
-				width="54"
-				height="54"
-				class="pr-2"
+				width="40"
+				height="40"
+				class="pr-3"
 				src="logo.png"
 			/>
-			<h1 class="leading-none text-2xl text-grey-darkest flex-grow mt-2">
+			<h1 class="leading-none text-xl font-bold tracking-tight text-white flex-grow">
 				<a
-					class="no-underline text-grey-darkest hover:text-black dark:text-white dark:hover:text-cyan-300"
+					class="no-underline text-white hover:text-white/80 transition-colors"
 					href={getLink('/')}
 				>
 					Wiki Search
@@ -63,9 +63,9 @@
 
 		<!-- Mobile menu button -->
 		<div class="md:hidden">
-			<button class="outline-none mobile-menu-button" on:click={toggleMenu}>
+			<button class="outline-none mobile-menu-button text-white/70 hover:text-white transition-colors" on:click={toggleMenu}>
 				<svg
-					class="w-6 h-6 text-gray-900 dark:text-white hover:text-blue-500"
+					class="w-6 h-6"
 					fill="none"
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -80,12 +80,14 @@
 	</div>
 
 	<!-- Search bar - centered -->
-	<div class="flex-1 flex justify-center md:px-4 mb-2 md:mb-0">
-		<Searchbar on:wiki-search bind:this={searchbar} />
+	<div class="flex-1 flex justify-center md:px-8 mb-2 md:mb-0 max-w-2xl mx-auto w-full">
+		<div class="w-full">
+			<Searchbar on:wiki-search bind:this={searchbar} />
+		</div>
 	</div>
 
 	<!-- Language selector - right side -->
-	<div class="flex justify-end md:flex-shrink-0">
+	<div class="flex justify-end md:flex-shrink-0 md:ml-4">
 		<LanguageSelector on:lang-change={handleLanguageChange} />
 	</div>
 </header>

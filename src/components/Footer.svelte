@@ -7,32 +7,32 @@
 	import { getLink } from '../lib/utils';
 </script>
 
-<footer class="bg-gray-900 dark:bg-gray-950 text-gray-300 py-8">
+<footer class="bg-transparent border-t border-white/[0.06] text-gray-400 py-12 mt-12">
 	<div class="max-w-7xl mx-auto px-4">
 		<div class="flex flex-col md:flex-row justify-between items-center gap-6">
 			<!-- Left: About link -->
 			<nav class="flex gap-6">
 				<a
 					href={getLink('about')}
-					class="text-gray-300 hover:text-white transition-colors font-medium"
+					class="text-sm font-medium hover:text-white transition-colors"
 				>
 					{$_('nav_about')}
 				</a>
 			</nav>
 
 			<!-- Center: Description -->
-			<p class="text-sm text-gray-400 text-center">
+			<p class="text-xs text-gray-500 text-center font-mono">
 				{$_('app_description') || 'Wikipedia Search - Discover trending articles'}
 			</p>
 
 			<!-- Right: Credits -->
-			<div class="text-sm text-gray-400 text-right">
-				<p>Built with <span class="text-red-400">♥</span> using Svelte</p>
+			<div class="text-xs text-gray-500 text-right font-mono">
+				<p>Built with <span class="text-cyan-500">♥</span> using Svelte</p>
 			</div>
 		</div>
 
 		<!-- Bottom: Copyright -->
-		<div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+		<div class="mt-8 text-center text-gray-600 text-xs font-mono">
 			<p>&copy; 2024 Wiki Search. All rights reserved.</p>
 		</div>
 	</div>
