@@ -1,69 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-	/* Improve base typography */
-	html {
-		@apply scroll-smooth;
+	html,
+	body,
+	#root {
+		@apply h-full m-0 p-0 scroll-smooth;
 	}
 
 	body {
-		@apply font-sans;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
+		@apply bg-[#050508] text-gray-300 antialiased font-sans;
 	}
 
-	/* Typography scales */
+	/* Selection colors - cyan accent */
+	::selection {
+		@apply bg-cyan-500/30 text-white;
+	}
+
+	a {
+		@apply text-inherit no-underline transition-colors duration-200;
+	}
+
 	h1, h2, h3, h4, h5, h6 {
-		@apply font-bold leading-tight;
+		@apply text-white font-semibold tracking-tight;
 	}
 
-	p {
-		@apply leading-relaxed;
+	/* Custom Scrollbars */
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
 	}
 
-	/* Better readability for small text */
-	small, .text-xs, .text-sm {
-		@apply leading-snug;
-	}
-}
-
-@layer utilities {
-	/* Text truncation utilities */
-	.line-clamp-2 {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	::-webkit-scrollbar-track {
+		background: transparent;
 	}
 
-	.line-clamp-3 {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	::-webkit-scrollbar-thumb {
+		background: #333;
+		border-radius: 4px;
+		border: 2px solid #000;
 	}
 
-	.line-clamp-5 {
-		display: -webkit-box;
-		-webkit-line-clamp: 5;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+
+	::-webkit-scrollbar-corner {
+		background: transparent;
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 	}
 }
 
 @layer components {
-	/* Article card text */
-	.article-title {
-		@apply font-bold text-lg leading-tight text-gray-900 dark:text-white line-clamp-2;
+	/* Wiki Card - Glassmorphism (based on .star-card) */
+	.wiki-card {
+		@apply h-full flex flex-col;
+		@apply border border-white/[0.06] rounded-xl p-5;
+		@apply hover:border-white/[0.12];
+		@apply transition-all duration-200 ease-in-out;
+		@apply cursor-pointer backdrop-blur-sm;
+		background: rgba(10, 10, 14, 0.8);
 	}
 
-	.article-description {
-		@apply text-sm leading-snug text-gray-700 dark:text-gray-300 line-clamp-3;
+	.wiki-card:hover {
+		background: rgba(14, 14, 20, 0.9);
+		@apply -translate-y-1;
+		box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 	}
 
-	.article-tag {
-		@apply text-xs font-semibold leading-none;
+	/* Navbar Styles */
+	.navbar {
+		@apply sticky top-0 z-50 backdrop-blur-xl border-b border-white/[0.06];
+		background: rgba(8, 8, 12, 0.85);
+	}
+
+	.navbar-brand {
+		@apply text-lg font-bold tracking-tight text-white;
+	}
+
+	/* Input Styles */
+	.search-input {
+		@apply w-full px-4 py-2.5 bg-[#111] border border-white/[0.1] rounded-md;
+		@apply text-sm text-white placeholder-gray-500 font-medium;
+		@apply focus:outline-none focus:border-white/[0.2] focus:ring-1 focus:ring-white/[0.2];
+		@apply transition-all duration-200;
+	}
+
+	/* Page Title */
+	.page-title {
+		@apply text-4xl md:text-5xl font-bold tracking-tight mb-10 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60;
+	}
+
+	/* Datepicker Styles - Override svelte-calendar defaults */
+	.datepicker-wrapper {
+		@apply inline-block relative;
+	}
+
+	/* Ensure the popup appears below the button with enough clearance */
+	.datepicker-wrapper :global(.sc-popover),
+	.datepicker-wrapper :global([class*="popover"]),
+	.datepicker-wrapper :global(.popup),
+	.datepicker-wrapper :global(div[style*="position"]) {
+		margin-top: 48px !important;
+		transform: translateY(8px) !important;
+	}
+
+	/* Style the trigger button */
+	.datepicker-wrapper :global(button),
+	.datepicker-wrapper :global([role="button"]) {
+		@apply bg-[#0a0a0e] border border-white/10 rounded-lg px-4 py-2.5;
+		@apply text-white font-medium text-base;
+		@apply hover:bg-white/5 hover:border-white/20;
+		@apply transition-all duration-200;
+		@apply outline-none focus:outline-none focus:ring-0;
+		box-shadow: none !important;
+	}
+
+	/* Remove any material-design-like shadows/outlines */
+	.datepicker-wrapper :global(*) {
+		@apply outline-none focus:outline-none;
+		box-shadow: none;
+	}
+
+	/* Style the calendar popup - push it down to avoid navbar overlap */
+	.datepicker-wrapper :global(.calendar),
+	.datepicker-wrapper :global([class*="calendar"]),
+	.datepicker-wrapper :global(.contents) {
+		@apply bg-[#0a0a0e] border border-white/10 rounded-xl overflow-hidden;
+		@apply shadow-2xl;
+	}
+	
+	/* Force calendar to appear below trigger with proper spacing */
+	.datepicker-wrapper :global(.sc-popover-contents),
+	.datepicker-wrapper :global([class*="contents"]) {
+		top: calc(100% + 16px) !important;
+		position: absolute !important;
+	}
+
+	/* Calendar header styling */
+	.datepicker-wrapper :global(.calendar-header),
+	.datepicker-wrapper :global(.month-selector) {
+		@apply bg-transparent border-b border-white/10;
+	}
+
+	/* Navigation arrows */
+	.datepicker-wrapper :global(.arrow),
+	.datepicker-wrapper :global([class*="arrow"]) {
+		@apply text-white/70 hover:text-white;
+	}
+
+	/* Day cells */
+	.datepicker-wrapper :global(.day) {
+		@apply rounded-lg;
+	}
+
+	/* Selected day */
+	.datepicker-wrapper :global(.day.selected),
+	.datepicker-wrapper :global(.day[aria-selected="true"]) {
+		@apply bg-cyan-500 text-white font-semibold;
+	}
+
+	/* Today indicator */
+	.datepicker-wrapper :global(.day.today) {
+		@apply border border-cyan-400/50;
 	}
 }
