@@ -20,6 +20,9 @@ function createSearchStore() {
 	// Raw API response
 	const rawResults = writable({});
 	
+	// Loading state for search operations
+	const isLoading = writable(false);
+	
 	// API instance
 	let searchApi = createSearchApi(DEFAULT_LANGUAGE);
 	
@@ -59,6 +62,7 @@ function createSearchStore() {
 
 	return {
 		results,
+		isLoading,
 		
 		/**
 		 * Perform a Wikipedia search
@@ -66,12 +70,15 @@ function createSearchStore() {
 		 * @returns {Promise<void>}
 		 */
 		search: async (searchTerm) => {
+			isLoading.set(true);
 			try {
 				const data = await searchApi.search(searchTerm);
 				rawResults.set(data);
 			} catch (error) {
 				console.error('Search failed:', error);
 				rawResults.set({ error: true, message: error.message });
+			} finally {
+				isLoading.set(false);
 			}
 		},
 		
@@ -122,8 +129,17 @@ function createSearchStore() {
  * @type {Object}
  */
 function createFeaturedStore() {
-	// Raw API response
-	const rawFeatured = writable({});
+	// Raw API response with status tracking
+	const rawFeatured = writable({
+		status: 'idle', // 'idle' | 'loading' | 'success' | 'no_data' | 'error'
+		data: null,
+		requestedDate: null,  // Date the user requested
+		resolvedDate: null,   // Date that actually had data (may differ due to retries)
+		message: null
+	});
+	
+	// Loading state for featured operations
+	const isLoading = writable(false);
 	
 	// API instance
 	let featuredApi = createFeaturedApi(DEFAULT_LANGUAGE);
@@ -138,32 +154,52 @@ function createFeaturedStore() {
 
 	return {
 		articles,
+		isLoading,
 		
 		/**
 		 * Fetch featured articles for a specific date
+		 * Tracks both the requested date and the resolved date (which may differ due to retries)
 		 * @param {Date} date - Date to fetch articles for
+		 * @param {boolean} isUserRequest - Whether this is a user-initiated request (vs initial load)
 		 * @returns {Promise<void>}
 		 */
-		fetchForDate: async (date) => {
+		fetchForDate: async (date, isUserRequest = false) => {
+			isLoading.set(true);
+			rawFeatured.update(state => ({
+				...state,
+				status: 'loading',
+				requestedDate: date,
+				data: null
+			}));
+			
 			try {
+				let resolvedDate = date;
+				
 				const data = await featuredApi.fetchFeatured(date, {
 					onSuccess: (articles) => {
+						// Get the actual date that returned data
+						resolvedDate = featuredApi.getLastFeaturedDate();
 						rawFeatured.set({ 
 							data: articles, 
-							featuredDate: date,
-							status: 'success'
+							requestedDate: date,
+							resolvedDate: resolvedDate,
+							status: 'success',
+							message: null
 						});
 					},
 					onError: (error) => {
 						// Only show error on final failure (after all retries exhausted)
 						rawFeatured.set({ 
-							status: 'error', 
+							status: isUserRequest ? 'no_data' : 'error',
 							message: error.message,
-							featuredDate: date
+							requestedDate: date,
+							resolvedDate: null,
+							data: null
 						});
 					},
 					onRetry: (newDate) => {
-						// Silently retry with new date - don't show error toast
+						// Track retry attempts - update resolvedDate candidate
+						resolvedDate = newDate;
 						console.log('Retrying featured articles for:', newDate.toISOString().split('T')[0]);
 					}
 				});
@@ -172,8 +208,12 @@ function createFeaturedStore() {
 				rawFeatured.set({ 
 					status: 'error', 
 					message: error.message,
-					featuredDate: date
+					requestedDate: date,
+					resolvedDate: null,
+					data: null
 				});
+			} finally {
+				isLoading.set(false);
 			}
 		},
 		
