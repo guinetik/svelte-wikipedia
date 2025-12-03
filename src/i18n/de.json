@@ -1,11 +1,20 @@
 {
-    "title" : "Wikipedia-Suche mit Svelte",
-    "header_title" : "Wiki-Suche",
-    "nav_about" : "Über diese Seite",
+    "app_description": "Entdecke die meistgesehenen Wikipedia-Artikel nach Datum",
+    "title": "Wikipedia-Suche mit Svelte",
+    "header_title": "Wiki-Suche",
+    "nav_about": "Über diese Seite",
     "search_placeholder": "Artikel suchen",
-    "lang":"Sprache",
+    "lang": "Sprache",
     "home_header": "Willkommen bei der Wiki-Suche",
-    "home_aside": "Loading popular articles...",
+    "home_aside": "Beliebte Artikel werden geladen...",
     "home_featured_header": "Meistgesehene Artikel für den",
-    "wiki_no_data": "Keine Daten verfügbar. Versuche den vorherigen Tag..."
+    "wiki_no_data": "Keine Daten verfügbar.",
+    "old_date_warning": "Ältere Daten können etwas länger zum Laden brauchen...",
+    "date_too_old": "Wikipedia-Seitenaufrufdaten sind erst ab Juli 2015 verfügbar.",
+    "searching": "Suche läuft...",
+    "loading": "Artikel werden geladen...",
+    "no_data_for_date": "Keine Artikel für dieses Datum",
+    "no_data_for_date_desc": "Es sind keine Artikel verfügbar für",
+    "try_another_date": "Versuche ein anderes Datum.",
+    "showing_results_for": "Ergebnisse für"
 }

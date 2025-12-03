@@ -1,4 +1,5 @@
 {
+    "app_description": "Descubra os artigos da Wikipédia mais vistos por data",
     "title" : "Busca na Wikipedia com Svelte",
     "header_title" : "Busca Wiki",
     "nav_about" : "Sobre",
@@ -9,6 +10,7 @@
     "home_featured_header": "Artigos mais populares no dia",
     "wiki_no_data": "Nenhum dado disponível. Tentando o dia anterior...",
     "old_date_warning": "Datas mais antigas podem demorar um pouco mais para carregar...",
+    "date_too_old": "Os dados de visualizações da Wikipédia estão disponíveis apenas a partir de julho de 2015.",
     "searching": "Buscando...",
     "loading": "Carregando artigos...",
     "no_data_for_date": "Sem artigos para esta data",

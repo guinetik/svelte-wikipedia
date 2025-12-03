@@ -1,4 +1,5 @@
 {
+    "app_description": "Descubre los artículos de Wikipedia más vistos por fecha",
     "title" : "Svelte Búsqueda en Wikipedia",
     "header_title" : "Buscar Wiki",
     "nav_about" : "Sobre",
@@ -9,6 +10,7 @@
     "home_featured_header": "Artículos más vistos del día",
     "wiki_no_data": "No hay datos disponibles. Buscando en el día anterior...",
     "old_date_warning": "Las fechas más antiguas pueden tardar un poco más en cargar...",
+    "date_too_old": "Los datos de páginas vistas de Wikipedia solo están disponibles desde julio de 2015.",
     "searching": "Buscando...",
     "loading": "Cargando artículos...",
     "no_data_for_date": "No hay artículos para esta fecha",

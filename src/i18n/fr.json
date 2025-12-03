@@ -1,11 +1,20 @@
 {
-    "title" : "Recherche Wikipédia avec Svelte",
-    "header_title" : "Recherche wiki",
-    "nav_about" : "À propos de ce site",
+    "app_description": "Découvrez les articles Wikipédia les plus consultés par date",
+    "title": "Recherche Wikipédia avec Svelte",
+    "header_title": "Recherche Wiki",
+    "nav_about": "À propos",
     "search_placeholder": "Rechercher des articles",
-    "lang":"Sprache",
+    "lang": "Langue",
     "home_header": "Bienvenue dans la recherche Wiki",
-    "home_aside": "Chargement d'articles populaires...",
-    "home_featured_header": "Articles les plus consultés pour la journée du",
-    "wiki_no_data": "Aucune donnée disponible. Essayer le jour précédent..."
+    "home_aside": "Chargement des articles populaires...",
+    "home_featured_header": "Articles les plus consultés pour le",
+    "wiki_no_data": "Aucune donnée disponible.",
+    "old_date_warning": "Les dates plus anciennes peuvent prendre plus de temps à charger...",
+    "date_too_old": "Les données de pages vues Wikipédia ne sont disponibles qu'à partir de juillet 2015.",
+    "searching": "Recherche en cours...",
+    "loading": "Chargement des articles...",
+    "no_data_for_date": "Aucun article pour cette date",
+    "no_data_for_date_desc": "Il n'y a pas d'articles disponibles pour le",
+    "try_another_date": "Essayez une autre date.",
+    "showing_results_for": "Résultats pour le"
 }

@@ -1,4 +1,5 @@
 {
+    "app_description": "Discover the most viewed Wikipedia articles by date",
     "title" : "Svelte Wikipedia Search",
     "header_title" : "Wiki Search",
     "nav_about" : "About",

@@ -4,6 +4,8 @@
 	import { Datepicker } from 'svelte-calendar';
 	import { _, locale } from 'svelte-i18n';
 	import { fade } from 'svelte/transition';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import WikiArticleGrid from '../components/WikiArticleGrid.svelte';
 	import Spinner from '../components/Spinner.svelte';
 	import DatePickerTheme from '../lib/theme';
@@ -21,7 +23,7 @@
 	// Featured articles state
 	const yesterday = dayjs().subtract(1, 'day').toDate();
 	let datepickerStore;
-	let currentFetchedDate = yesterday; // Track what date we last fetched
+	let currentFetchedDate = null; // Track what date we last fetched
 	let featuredArticles = [];
 	let featuredStatus = 'idle';
 	let isFeaturedLoading = false;
@@ -30,10 +32,58 @@
 	// Minimum date for Wikipedia pageviews API (started July 2015)
 	const MIN_DATE = new Date('2015-07-01');
 
+	/**
+	 * Parse date from URL query param
+	 */
+	function parseDateParam(dateParam) {
+		if (!dateParam) return null;
+
+		const parsed = dayjs(dateParam, 'YYYY-MM-DD');
+		if (!parsed.isValid()) return null;
+
+		const date = parsed.toDate();
+		// Validate date is within allowed range
+		if (date < MIN_DATE || date > yesterday) return null;
+
+		return date;
+	}
+
+	// Valid language codes
+	const VALID_LANGS = ['en', 'es', 'pt', 'de', 'fr', 'it'];
+
+	// Get initial date and lang from URL
+	$: urlDateParam = $page.url.searchParams.get('date');
+	$: urlLangParam = $page.url.searchParams.get('lang');
+	$: initialDate = parseDateParam(urlDateParam) || yesterday;
+	$: initialLang = VALID_LANGS.includes(urlLangParam) ? urlLangParam : null;
+
+	/**
+	 * Update URL with current date and language (without page reload)
+	 */
+	function updateUrl(date, lang) {
+		const dateStr = dayjs(date).format('YYYY-MM-DD');
+		const url = new URL(window.location.href);
+		url.searchParams.set('date', dateStr);
+		if (lang) url.searchParams.set('lang', lang);
+		goto(url.pathname + url.search, { replaceState: true, noScroll: true });
+	}
+
 	onMount(async () => {
-		// Get featured articles for yesterday (initial load)
-		currentFetchedDate = selectedDate;
-		featuredStore.fetchForDate(selectedDate);
+		// Set language from URL if present
+		if (initialLang) {
+			locale.set(initialLang);
+		}
+
+		// Get current lang code
+		const currentLang = initialLang || $locale?.split('-')[0] || 'en';
+		lastLang = currentLang;
+
+		// Use date from URL or default to yesterday
+		currentFetchedDate = initialDate;
+		featuredStore.fetchForDate(initialDate);
+
+		// Update URL to reflect current state
+		updateUrl(initialDate, currentLang);
 
 		// Initialize format based on current language
 		currentFormat = dateFormats[$locale];
@@ -42,11 +92,18 @@
 		localeStore = locale.subscribe((lang) => {
 			currentFormat = dateFormats[lang] || dateFormats.en;
 			const langCode = lang?.split('-')[0] || 'en';
-			if (langCode !== lastLang) {
+			if (langCode !== lastLang && lastLang !== null) {
 				lastLang = langCode;
 				searchStore.setLanguage(langCode);
 				featuredStore.setLanguage(langCode);
+				// Refetch for current date in new language
+				if (currentFetchedDate) {
+					featuredStore.fetchForDate(currentFetchedDate);
+				}
+				// Update URL with new language
+				updateUrl(currentFetchedDate || initialDate, langCode);
 			}
+			lastLang = langCode;
 		});
 	});
 
@@ -85,7 +142,7 @@
 	}
 
 	// Get values from datepicker store
-	$: selectedDate = $datepickerStore?.selected ?? yesterday;
+	$: selectedDate = $datepickerStore?.selected ?? initialDate;
 	$: isOpen = $datepickerStore?.open ?? false;
 
 	// Fetch when picker CLOSES with a different date
@@ -93,9 +150,9 @@
 		if (wasOpen && !isOpen) {
 			// Picker just closed - check if date changed
 			if (!isSameDay(selectedDate, currentFetchedDate) && !isFeaturedLoading) {
-				console.log('Picker closed with new date:', selectedDate);
 				currentFetchedDate = selectedDate;
 				featuredStore.fetchForDate(selectedDate);
+				updateUrl(selectedDate, lastLang);
 			}
 		}
 		wasOpen = isOpen;
@@ -137,7 +194,7 @@
 		</h1>
 		<div class="datepicker-wrapper relative z-30 mt-2">
 			<Datepicker
-				selected={yesterday}
+				selected={initialDate}
 				bind:store={datepickerStore}
 				format={currentFormat}
 				start={MIN_DATE}
