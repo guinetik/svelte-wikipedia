@@ -14,5 +14,6 @@
     "loading": "Loading articles...",
     "no_data_for_date": "No articles for this date",
     "no_data_for_date_desc": "There are no featured articles available for",
-    "try_another_date": "Try selecting a different date."
+    "try_another_date": "Try selecting a different date.",
+    "showing_results_for": "Showing results for"
 }

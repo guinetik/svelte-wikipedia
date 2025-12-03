@@ -76,15 +76,11 @@
 </a>
 
 <style>
-	/* Force line clamping with max-height fallback */
+	/* Allow multiline title wrapping */
 	.card-title {
-		display: -webkit-box !important;
-		-webkit-line-clamp: 1 !important;
-		-webkit-box-orient: vertical !important;
-		overflow: hidden !important;
-		text-overflow: ellipsis !important;
-		max-height: 1.8em;
 		line-height: 1.3;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
 	}
 	
 	.card-description {

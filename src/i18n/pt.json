@@ -13,5 +13,6 @@
     "loading": "Carregando artigos...",
     "no_data_for_date": "Sem artigos para esta data",
     "no_data_for_date_desc": "Não há artigos em destaque disponíveis para",
-    "try_another_date": "Tente selecionar uma data diferente."
+    "try_another_date": "Tente selecionar uma data diferente.",
+    "showing_results_for": "Mostrando resultados para"
 }
