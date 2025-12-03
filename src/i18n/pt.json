@@ -7,5 +7,11 @@
     "home_header": "Bem vindo a Busca Wiki",
     "home_aside": "Carregando artigos populares...",
     "home_featured_header": "Artigos mais populares no dia",
-    "wiki_no_data": "Nenhum dado disponível. Tentando o dia anterior..."
+    "wiki_no_data": "Nenhum dado disponível. Tentando o dia anterior...",
+    "old_date_warning": "Datas mais antigas podem demorar um pouco mais para carregar...",
+    "searching": "Buscando...",
+    "loading": "Carregando artigos...",
+    "no_data_for_date": "Sem artigos para esta data",
+    "no_data_for_date_desc": "Não há artigos em destaque disponíveis para",
+    "try_another_date": "Tente selecionar uma data diferente."
 }
