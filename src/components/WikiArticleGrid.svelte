@@ -23,9 +23,9 @@
 		columns-1 
 		sm:columns-2 
 		md:columns-3 
-		lg:columns-4 
-		xl:columns-4 
-		2xl:columns-4"
+		lg:columns-3
+		xl:columns-3 
+		2xl:columns-3"
 	>
 		{#each articlesToDisplay as wikiArticle (wikiArticle.i)}
 			<div class="break-inside-avoid mb-4 md:mb-6">

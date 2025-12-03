@@ -2,6 +2,11 @@
 	import * as easingFunctions from 'svelte/easing';
 	import { fade, fly } from 'svelte/transition';
 	import { fix } from '../lib/utils';
+
+	/**
+	 * Article data object containing Wikipedia article details
+	 * @type {{title: string, text: string, tags: string[], link: string, image: string, i: number}}
+	 */
 	export let article = {
 		title: 'Title',
 		text: 'text',
@@ -13,14 +18,22 @@
 
 	/**
 	 * Ensure tags is always an array
+	 * @type {string[]}
 	 */
 	$: tagsToDisplay = Array.isArray(article.tags) ? article.tags : [];
+
+	/**
+	 * Extract views tag from the tags array (for separate display)
+	 * @type {string|null}
+	 */
+	$: viewsTag = tagsToDisplay.find(tag => tag.includes('views'));
 </script>
 
-<article
-	class="rounded overflow-hidden shadow-lg 
-	bg-white h-full flex flex-col
-	dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+<a 
+	href={article.link} 
+	target="_blank" 
+	rel="noopener noreferrer"
+	class="wiki-card group relative overflow-hidden !p-0 block h-[550px] hover:no-underline"
 	in:fix(fly)={{
 		y: 100 * article.i,
 		duration: 1000,
@@ -33,54 +46,54 @@
 	}}
 >
 	{#if article.image}
-		<div class="w-full bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
-			<a href={article.link} target="_blank" class="dark:text-cyan-300 text-blue-600 block w-full">
-				<img 
-					alt={article.title} 
-					src={article.image} 
-					class="w-full h-auto object-cover object-top" 
-				/>
-			</a>
+		<div class="absolute inset-0 z-0 h-full">
+			<img 
+				alt={article.title} 
+				src={article.image} 
+				class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 opacity-100" 
+			/>
 		</div>
 	{/if}
-	<div class="px-4 py-3 flex-1 flex flex-col">
-		<a href={article.link} target="_blank" class="hover:underline">
-			{#if article.image}
-				<h2 class="font-bold text-lg leading-tight text-cyan-400 dark:text-cyan-300 line-clamp-2">{article.title}</h2>
-			{:else}
-				<h2 class="font-bold text-xl leading-tight text-cyan-400 dark:text-cyan-300 line-clamp-3">{article.title}</h2>
-			{/if}
-		</a>
+	
+	<!-- Compact gradient overlay at bottom -->
+	<div class="absolute bottom-0 w-full z-20 bg-gradient-to-t from-black via-black to-transparent pt-20 pb-5 px-5">
+		<h2 class="card-title font-bold text-2xl leading-tight text-white group-hover:text-cyan-400 transition-colors drop-shadow-lg mb-2">
+			{article.title}
+		</h2>
+		
 		{#if article.text}
-			<p class="{article.image ? 'article-description' : 'article-description-expanded'}">
+			<p class="card-description text-sm text-gray-300 leading-snug mb-3 drop-shadow-sm">
 				{article.text}
 			</p>
 		{/if}
+		
+		{#if viewsTag}
+			<span class="inline-block bg-cyan-500/20 border border-cyan-400/30 rounded px-2.5 py-1 text-xs font-semibold text-cyan-300 backdrop-blur-sm">
+				{viewsTag}
+			</span>
+		{/if}
 	</div>
-	<div class="px-4 pb-3 pt-2 flex-shrink-0 flex flex-wrap gap-1.5">
-		{#each tagsToDisplay as tag}
-			<a
-				target="_blank"
-				href={article.link && (tag.includes('views')
-					? article.link
-					: article.link.replace(article.link.split('/').pop(), tag)) || '#'}
-			>
-				<span
-					class="article-tag inline-block bg-blue-100 dark:bg-blue-900 rounded-full px-3 py-1 text-gray-800 dark:text-blue-200"
-					>{tag}</span
-				>
-			</a>
-		{/each}
-	</div>
-</article>
+</a>
 
 <style>
-	/* Utilities for expanded layouts */
-	:global(.article-title-large) {
-		@apply font-bold text-xl leading-tight text-gray-900 dark:text-white line-clamp-3;
+	/* Force line clamping with max-height fallback */
+	.card-title {
+		display: -webkit-box !important;
+		-webkit-line-clamp: 1 !important;
+		-webkit-box-orient: vertical !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		max-height: 1.8em;
+		line-height: 1.3;
 	}
-
-	:global(.article-description-expanded) {
-		@apply text-sm leading-snug text-gray-700 dark:text-gray-300 flex-1 overflow-hidden;
+	
+	.card-description {
+		display: -webkit-box !important;
+		-webkit-line-clamp: 4 !important;
+		-webkit-box-orient: vertical !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		max-height: 5.5em;
+		line-height: 1.4;
 	}
 </style>
