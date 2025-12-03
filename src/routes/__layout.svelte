@@ -68,16 +68,16 @@
 <Toasts />
 {#if wikiStatus.loading || $isi8nLoading}
 	<div class="fixed w-screen h-screen z-40" in:fix(fade)>
-		<div class="w-full h-full bg-slate-800 opacity-80" />
+		<div class="w-full h-full bg-black opacity-80" />
 		<Spinner />
 	</div>
 {/if}
 {#if !$isi8nLoading}
-	<main class="dark:bg-gray-800 bg-gray-100 min-h-screen flex flex-col">
+	<main class="bg-[#050508] min-h-screen flex flex-col app-container">
 		<div class="{pageScrollY > 120 ? 'fixed top-0' : 'relative'} w-full transition-transform z-30">
 			<Header on:wiki-search={handleSearch} on:lang-change={handleLangChange} />
 		</div>
-		<div class="flex-1">
+		<div class="flex-1 w-full max-w-7xl mx-auto px-4 py-8 page-container">
 			<slot class="h-full" />
 		</div>
 		<button
@@ -86,7 +86,7 @@
 			data-mdb-ripple-color="light"
 			on:click={scroll2Top}
 			class="{pageScrollY > 100 ? 'inline-block' : 'hidden'} p-3 fixed
-      bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out bottom-5 right-5 
+      bg-cyan-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-cyan-700 hover:shadow-lg focus:bg-cyan-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-cyan-800 active:shadow-lg transition duration-150 ease-in-out bottom-5 right-5 
       dark:bg-cyan-500 dark:hover:bg-cyan-700 dark:focus:bg-cyan-700 dark:active:bg-cyan-800"
 			id="btn-back-to-top"
 		>
@@ -108,7 +108,7 @@
 	</main>
 {/if}
 <svelte:window bind:scrollY={pageScrollY} />
-<svelte:body class="dark:bg-gray-800 bg-gray-100 h-screen" />
+<svelte:body class="bg-[#050508] text-gray-300 h-screen" />
 <svelte:head>
   <!-- Primary Meta -->
   <title>Svelte Wikipedia Search by Guinetik</title>
